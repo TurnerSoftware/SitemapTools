@@ -83,6 +83,7 @@ namespace TurnerSoftware.Sitemap
         {
             var type = GetSitemapType(sitemapLocation);
 
+            //Perform sitemap type-check
             if (type == SitemapType.Unknown)
             {
                 if (options.ThrowExceptionOnUnknownType)
@@ -96,9 +97,46 @@ namespace TurnerSoftware.Sitemap
             }
 
             var rawSitemap = requestService.RetrieveRawSitemap(sitemapLocation);
-            var result = ParseSitemap(type, rawSitemap);
+            var parsedSitemap = ParseSitemap(type, rawSitemap);
 
-            return result;
+            //Set the location of the parsed sitemap
+            parsedSitemap.Location = sitemapLocation;
+
+            if (options.ApplyDomainRestrictions)
+            {
+                var validEntries = new List<SitemapEntry>();
+
+                //For every entry, check the host matches the sitemap it is specified in
+                foreach (var entry in parsedSitemap.Urls)
+                {
+                    if (entry.Location.Host == sitemapLocation.Host)
+                    {
+                        validEntries.Add(entry);
+                    }
+                }
+
+                parsedSitemap.Urls = validEntries;
+            }
+            
+            if (options.FetchInnerSitemaps)
+            {
+                var fetchedInnerSitemaps = new List<SitemapFile>();
+                
+                //For every sitemap index, fetch the sitemap
+                foreach (var indexedSitemap in parsedSitemap.Sitemaps)
+                {
+                    var tmpInnerSitemap = RetrieveSitemap(indexedSitemap.Location, options);
+
+                    //Copy over the last modified from the sitemap index
+                    tmpInnerSitemap.LastModified = indexedSitemap.LastModified;
+
+                    fetchedInnerSitemaps.Add(tmpInnerSitemap);
+                }
+
+                parsedSitemap.Sitemaps = fetchedInnerSitemaps;
+            }
+
+            return parsedSitemap;
         }
 
         /// <summary>

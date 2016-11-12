@@ -12,7 +12,7 @@ namespace TurnerSoftware.Sitemap
 
 		public DateTime? LastModified { get; set; }
 		public IEnumerable<SitemapFile> Sitemaps { get; set; }
-		
+
 		public IEnumerable<SitemapEntry> Urls { get; set; }
 
 		public SitemapFile()

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TurnerSoftware.Sitemap.Request
 {
-    public interface ISitemapRequestService
-    {
-        IEnumerable<Uri> GetAvailableSitemapsForDomain(string domainName);
-        string RetrieveRawSitemap(Uri sitemapLocation);
-    }
+	public interface ISitemapRequestService
+	{
+		IEnumerable<Uri> GetAvailableSitemapsForDomain(string domainName);
+		string RetrieveRawSitemap(Uri sitemapLocation);
+	}
 }

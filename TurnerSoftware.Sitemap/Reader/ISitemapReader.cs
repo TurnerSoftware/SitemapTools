@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TurnerSoftware.Sitemap.Reader
 {
-    interface ISitemapReader
-    {
-        SitemapFile ParseSitemap(string rawSitemap);
-    }
+	interface ISitemapReader
+	{
+		SitemapFile ParseSitemap(string rawSitemap);
+	}
 }

@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace TurnerSoftware.Sitemap
 {
-    public enum ChangeFrequency
-    {
-        Always,
-        Hourly,
-        Daily,
-        Weekly,
-        Monthly,
-        Yearly,
-        Never
-    }
+	public enum ChangeFrequency
+	{
+		Always,
+		Hourly,
+		Daily,
+		Weekly,
+		Monthly,
+		Yearly,
+		Never
+	}
 }

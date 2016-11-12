@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TurnerSoftware.Sitemap
 {
-    public enum SitemapType
-    {
-        Unknown,
-        Xml
-    }
+	public enum SitemapType
+	{
+		Unknown,
+		Xml
+	}
 }

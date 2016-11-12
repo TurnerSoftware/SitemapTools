@@ -41,6 +41,8 @@ namespace TurnerSoftware.Sitemap.Reader
 						var indexedSitemap = ParseSitemapIndex(sitemapNode);
 						indexedSitemaps.Add(indexedSitemap);
 					}
+
+					result.Sitemaps = indexedSitemaps;
 				}
 			}
 

@@ -75,7 +75,7 @@ namespace TurnerSoftware.Sitemap.Request
 			using (var responseStream = response.GetResponseStream())
 			{
 				var stream = responseStream;
-				if (sitemapLocation.AbsolutePath.EndsWith(".gz"))
+				if (sitemapLocation.AbsolutePath.Contains(".gz"))
 				{
 					stream = new GZipStream(stream, CompressionMode.Decompress);
 				}

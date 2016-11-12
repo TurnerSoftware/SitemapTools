@@ -175,7 +175,7 @@ namespace TurnerSoftware.Sitemap
 				if (sitemap.Sitemaps.Count() > 0)
 				{
 					//If there are inner sitemaps, grab their flattened sitemaps
-					var flattenedEntries = FlattenSitemaps(sitemaps);
+					var flattenedEntries = FlattenSitemaps(sitemap.Sitemaps);
 					currentEntries.AddRange(flattenedEntries);
 				}
 
@@ -204,7 +204,7 @@ namespace TurnerSoftware.Sitemap
 		{
 			var path = sitemapLocation.AbsolutePath;
 
-			if (path.EndsWith(".xml") || path.EndsWith(".xml.gz"))
+			if (path.Contains(".xml") || path.Contains(".xml.gz"))
 			{
 				return SitemapType.Xml;
 			}

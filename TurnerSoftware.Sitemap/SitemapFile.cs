@@ -6,13 +6,19 @@ using System.Threading.Tasks;
 
 namespace TurnerSoftware.Sitemap
 {
-    public class SitemapFile
-    {
-        public Uri Location { get; set; }
+	public class SitemapFile
+	{
+		public Uri Location { get; set; }
 
-        public DateTime? LastModified { get; set; }
-        public IEnumerable<SitemapFile> Sitemaps { get; set; }
-        
-        public IEnumerable<SitemapEntry> Urls { get; set; }
-    }
+		public DateTime? LastModified { get; set; }
+		public IEnumerable<SitemapFile> Sitemaps { get; set; }
+		
+		public IEnumerable<SitemapEntry> Urls { get; set; }
+
+		public SitemapFile()
+		{
+			Sitemaps = Enumerable.Empty<SitemapFile>();
+			Urls = Enumerable.Empty<SitemapEntry>();
+		}
+	}
 }

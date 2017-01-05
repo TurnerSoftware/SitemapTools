@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TurnerSoftware.Sitemap")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Turner Software .Net Sitemap Library")]
+[assembly: AssemblyDescription("Sitemap parsing and querying utility")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TurnerSoftware.Sitemap")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("Turner Software")]
+[assembly: AssemblyProduct(".Net Sitemap Library")]
+[assembly: AssemblyCopyright("Copyright © 2016 Turner Software")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

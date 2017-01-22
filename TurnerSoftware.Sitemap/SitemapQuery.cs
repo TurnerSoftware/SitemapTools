@@ -99,6 +99,11 @@ namespace TurnerSoftware.Sitemap
 			var rawSitemap = requestService.RetrieveRawSitemap(sitemapLocation);
 			var parsedSitemap = ParseSitemap(type, rawSitemap);
 
+			if (parsedSitemap == null)
+			{
+				return null;
+			}
+
 			//Set the location of the parsed sitemap
 			parsedSitemap.Location = sitemapLocation;
 

@@ -50,17 +50,31 @@ namespace TurnerSoftware.Sitemap.Request
 			{
 				foreach (var sitemapPath in sitemapFilePaths)
 				{
-					if (Uri.TryCreate(sitemapPath, UriKind.Absolute, out tmpUri))
+					try
 					{
-						//We perform a head request because we don't care about the content here
-						var requestMessage = new HttpRequestMessage(HttpMethod.Head, tmpUri);
-						var response = httpClient.SendAsync(requestMessage).Result;
-
-						//If it is successful, add to our results list
-						if (response.IsSuccessStatusCode)
+						if (Uri.TryCreate(sitemapPath, UriKind.Absolute, out tmpUri))
 						{
-							result.Add(tmpUri);
+							//We perform a head request because we don't care about the content here
+							var requestMessage = new HttpRequestMessage(HttpMethod.Head, tmpUri);
+							var response = httpClient.SendAsync(requestMessage).Result;
+
+							//If it is successful, add to our results list
+							if (response.IsSuccessStatusCode)
+							{
+								result.Add(tmpUri);
+							}
 						}
+					}
+					catch (WebException ex)
+					{
+						//If it throws an exception but we have a response, just skip the sitemap
+						if (ex.Response != null)
+						{
+							continue;
+						}
+
+						//If no response, throw the exception up
+						throw;
 					}
 				}
 			}
@@ -70,21 +84,35 @@ namespace TurnerSoftware.Sitemap.Request
 		public string RetrieveRawSitemap(Uri sitemapLocation)
 		{
 			var request = WebRequest.Create(sitemapLocation);
-
-			using (var response = request.GetResponse())
-			using (var responseStream = response.GetResponseStream())
+			
+			try
 			{
-				var stream = responseStream;
-				if (sitemapLocation.AbsolutePath.Contains(".gz"))
+				using (var response = request.GetResponse())
+				using (var responseStream = response.GetResponseStream())
 				{
-					stream = new GZipStream(stream, CompressionMode.Decompress);
+					var stream = responseStream;
+
+					//If the path looks like it is GZipped, automatically decompress it
+					if (sitemapLocation.AbsolutePath.Contains(".gz"))
+					{
+						stream = new GZipStream(stream, CompressionMode.Decompress);
+					}
+
+					using (var streamReader = new StreamReader(stream))
+					{
+						var result = streamReader.ReadToEnd();
+						return result;
+					}
+				}
+			}
+			catch (WebException ex)
+			{
+				if (ex.Response != null)
+				{
+					return null;
 				}
 
-				using (var streamReader = new StreamReader(stream))
-				{
-					var result = streamReader.ReadToEnd();
-					return result;
-				}
+				throw;
 			}
 		}
 	}

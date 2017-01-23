@@ -152,6 +152,11 @@ namespace TurnerSoftware.Sitemap
 		/// <returns></returns>
 		public SitemapFile ParseSitemap(SitemapType type, string rawSitemap)
 		{
+			if (rawSitemap == null)
+			{
+				return null;
+			}
+
 			ISitemapReader reader;
 			if (type == SitemapType.Xml)
 			{

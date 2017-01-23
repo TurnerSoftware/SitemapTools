@@ -16,7 +16,7 @@ namespace TurnerSoftware.Sitemap.Reader
 		{
 			var result = new SitemapFile();
 			var document = new XmlDocument();
-
+			
 			try
 			{
 				document.LoadXml(rawSitemap);

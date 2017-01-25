@@ -17,7 +17,15 @@ namespace TurnerSoftware.Sitemap.Request
 			//Load Robots.txt to see if we are told where the sitemaps live
 			var robot = new Robots.Robots();
 			var robotsUri = new UriBuilder("http", domainName);
-			robot.Load(robotsUri.Uri);
+
+			try
+			{
+				robot.Load(robotsUri.Uri);
+			}
+			catch (WebException)
+			{
+				//Ignore web exception errors (like 404s) and continue
+			}
 
 			var sitemapFilePaths = robot.GetSitemapUrls();
 

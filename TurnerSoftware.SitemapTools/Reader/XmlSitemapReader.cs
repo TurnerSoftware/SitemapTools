@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace TurnerSoftware.Sitemap.Reader
+namespace TurnerSoftware.SitemapTools.Reader
 {
 	/// <summary>
 	/// Based on the Sitemap specification described here: http://www.sitemaps.org/protocol.html

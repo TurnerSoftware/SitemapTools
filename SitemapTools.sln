@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2002
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurnerSoftware.SitemapTools", "TurnerSoftware.SitemapTools\TurnerSoftware.SitemapTools.csproj", "{368739A7-4B60-47D2-AAC5-05A30CE3033C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B79203C9-7B50-4C91-A0AD-EAA6FBAABD53}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{5CE756D3-7375-405D-8402-C233F75C3D6C}"
+	ProjectSection(SolutionItems) = preProject
+		Lib\Robots.dll = Lib\Robots.dll
+		Lib\Robots.dll.config = Lib\Robots.dll.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{368739A7-4B60-47D2-AAC5-05A30CE3033C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{368739A7-4B60-47D2-AAC5-05A30CE3033C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{368739A7-4B60-47D2-AAC5-05A30CE3033C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{368739A7-4B60-47D2-AAC5-05A30CE3033C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8796E9A-2E75-4B71-A6BE-A2EB4C4D30F3}
+	EndGlobalSection
+EndGlobal

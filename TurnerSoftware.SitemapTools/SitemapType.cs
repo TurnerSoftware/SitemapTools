@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TurnerSoftware.Sitemap.Reader
+namespace TurnerSoftware.SitemapTools
 {
-	interface ISitemapReader
+	public enum SitemapType
 	{
-		SitemapFile ParseSitemap(string rawSitemap);
+		Unknown,
+		Xml
 	}
 }

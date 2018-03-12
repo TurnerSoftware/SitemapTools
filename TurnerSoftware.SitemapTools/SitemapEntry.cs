@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TurnerSoftware.Sitemap
+namespace TurnerSoftware.SitemapTools
 {
 	public class SitemapEntry
 	{

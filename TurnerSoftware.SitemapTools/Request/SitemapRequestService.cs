@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TurnerSoftware.Sitemap.Request
+namespace TurnerSoftware.SitemapTools.Request
 {
 	public class SitemapRequestService : ISitemapRequestService
 	{

@@ -14,21 +14,6 @@ namespace TurnerSoftware.SitemapTools.Request
 	{
 		public IEnumerable<Uri> GetAvailableSitemapsForDomain(string domainName)
 		{
-			//Load Robots.txt to see if we are told where the sitemaps live
-			var robot = new Robots.Robots();
-			var robotsUri = new UriBuilder("http", domainName);
-
-			try
-			{
-				robot.Load(robotsUri.Uri);
-			}
-			catch (WebException)
-			{
-				//Ignore web exception errors (like 404s) and continue
-			}
-
-			var sitemapFilePaths = robot.GetSitemapUrls();
-
 			var httpDefaultSitemap = new UriBuilder("http", domainName)
 			{
 				Path = "sitemap.xml"
@@ -38,21 +23,9 @@ namespace TurnerSoftware.SitemapTools.Request
 				Path = "sitemap.xml"
 			}.Uri.ToString();
 
-			//Check if the "default" sitemap path is in the list, if not add it
-			//If we can't find a sitemap listed in the robots.txt file, add a "default" to search
-			if (!sitemapFilePaths.Any(url => url == httpDefaultSitemap || url == httpsDefaultSitemap))
-			{
-				//Some sites (eg. stackoverflow) specify a relative path for their site maps
-				if (sitemapFilePaths.Contains("/sitemap.xml"))
-				{
-					sitemapFilePaths.Remove("/sitemap.xml");
-				}
-
-				sitemapFilePaths.Add(httpDefaultSitemap);
-			}
+			var sitemapFilePaths = new[] { httpDefaultSitemap, httpsDefaultSitemap };
 
 			//Parse each of the paths and check that the file exists
-			Uri tmpUri;
 			var result = new List<Uri>();
 			using (var httpClient = new HttpClient())
 			{
@@ -60,7 +33,7 @@ namespace TurnerSoftware.SitemapTools.Request
 				{
 					try
 					{
-						if (Uri.TryCreate(sitemapPath, UriKind.Absolute, out tmpUri))
+						if (Uri.TryCreate(sitemapPath, UriKind.Absolute, out Uri tmpUri))
 						{
 							//We perform a head request because we don't care about the content here
 							var requestMessage = new HttpRequestMessage(HttpMethod.Head, tmpUri);

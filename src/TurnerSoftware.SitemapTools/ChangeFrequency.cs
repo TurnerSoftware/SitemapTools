@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace TurnerSoftware.SitemapTools
 {
-	public enum SitemapType
+	public enum ChangeFrequency
 	{
-		Unknown,
-		Xml
+		Always,
+		Hourly,
+		Daily,
+		Weekly,
+		Monthly,
+		Yearly,
+		Never
 	}
 }

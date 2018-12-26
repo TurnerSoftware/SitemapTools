@@ -3,13 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B79203C9-7B50-4C91-A0AD-EAA6FBAABD53}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{B79203C9-7B50-4C91-A0AD-EAA6FBAABD53}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurnerSoftware.SitemapTools", "TurnerSoftware.SitemapTools\TurnerSoftware.SitemapTools.csproj", "{788EF4B5-4FAC-4E83-BBF8-ADC89DEFD512}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurnerSoftware.SitemapTools", "src\TurnerSoftware.SitemapTools\TurnerSoftware.SitemapTools.csproj", "{788EF4B5-4FAC-4E83-BBF8-ADC89DEFD512}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F738FA56-D159-4C5E-BD05-81B5C3290971}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.build.props = src\Directory.build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +29,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{788EF4B5-4FAC-4E83-BBF8-ADC89DEFD512} = {F738FA56-D159-4C5E-BD05-81B5C3290971}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8796E9A-2E75-4B71-A6BE-A2EB4C4D30F3}

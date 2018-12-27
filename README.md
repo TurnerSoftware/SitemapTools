@@ -1,6 +1,9 @@
-# sitemap-dotnet
+# Sitemap Tools
 
-Provides parsing and querying support for sitemaps.
+A sitemap (sitemap.xml) querying and parsing library in C#
+
+[![AppVeyor](https://img.shields.io/appveyor/ci/Turnerj/sitemaptools/master.svg)](https://ci.appveyor.com/project/Turnerj/sitemaptools)
+[![Codecov](https://img.shields.io/codecov/c/github/turnersoftware/sitemaptools/master.svg)](https://codecov.io/gh/TurnerSoftware/SitemapTools)
 
 ## Key features
 - Parses both XML sitemaps and [sitemap index files](http://www.sitemaps.org/protocol.html#index)

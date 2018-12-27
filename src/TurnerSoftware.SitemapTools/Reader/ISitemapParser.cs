@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TurnerSoftware.SitemapTools.Reader
 {
-	interface ISitemapReader
+	public interface ISitemapParser
 	{
-		SitemapFile ParseSitemap(string rawSitemap);
+		SitemapFile ParseSitemap(TextReader reader);
 	}
 }

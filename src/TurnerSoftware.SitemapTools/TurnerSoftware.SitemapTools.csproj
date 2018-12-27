@@ -14,4 +14,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="TurnerSoftware.RobotsExclusionTools" Version="0.1.0" />
+  </ItemGroup>
+
 </Project>

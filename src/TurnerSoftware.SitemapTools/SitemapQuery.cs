@@ -6,222 +6,141 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using TurnerSoftware.SitemapTools.Request;
 using TurnerSoftware.SitemapTools.Reader;
+using System.Net.Http;
+using TurnerSoftware.RobotsExclusionTools;
 
 namespace TurnerSoftware.SitemapTools
 {
 	public class SitemapQuery
 	{
-		private ISitemapRequestService requestService { get; set; }
+		public static Dictionary<string, SitemapType> SitemapTypeMapping { get; }
+		public static Dictionary<SitemapType, ISitemapParser> SitemapParsers { get; }
 
-		public SitemapQuery() : this(new SitemapRequestService()) { }
-		public SitemapQuery(ISitemapRequestService requestService)
+		static SitemapQuery()
 		{
-			this.requestService = requestService;
-		}
-
-		/// <summary>
-		/// Finds the available sitemaps for the domain, retrieving each sitemap.
-		/// </summary>
-		/// <param name="domain"></param>
-		/// <returns></returns>
-		public IEnumerable<SitemapFile> RetrieveSitemapsForDomain(string domainName)
-		{
-			return RetrieveSitemapsForDomain(domainName, new SitemapFetchOptions());
-		}
-
-		/// <summary>
-		/// Finds the available sitemaps for the domain, retrieving each sitemap with the specified fetch options.
-		/// </summary>
-		/// <param name="domain"></param>
-		/// <returns></returns>
-		public IEnumerable<SitemapFile> RetrieveSitemapsForDomain(string domainName, SitemapFetchOptions options)
-		{
-			var sitemapLocations = requestService.GetAvailableSitemapsForDomain(domainName);
-			var result = new List<SitemapFile>();
-
-			foreach (var location in sitemapLocations)
+			SitemapTypeMapping = new Dictionary<string, SitemapType>
 			{
-				var tmpSitemap = RetrieveSitemap(location, options);
-				if (tmpSitemap != null)
+				{ "text/xml", SitemapType.Xml },
+				{ "application/xml", SitemapType.Xml }
+			};
+			SitemapParsers = new Dictionary<SitemapType, ISitemapParser>
+			{
+				{ SitemapType.Xml, new XmlSitemapParser() }
+			};
+		}
+		
+		public async Task<IEnumerable<Uri>> DiscoverSitemaps(string domainName)
+		{
+			var uriBuilder = new UriBuilder("http", domainName);
+			var baseUri = uriBuilder.Uri;
+
+			uriBuilder.Path = "sitemap.xml";
+			var defaultSitemapUri = uriBuilder.Uri;
+
+			var sitemapUris = new List<Uri>
+			{
+				defaultSitemapUri
+			};
+
+			var robotsFile = await new RobotsParser().FromUriAsync(baseUri);
+			sitemapUris.AddRange(robotsFile.SitemapEntries.Select(s => s.Sitemap));
+			sitemapUris = sitemapUris.Distinct().ToList();
+			
+			var result = new HashSet<Uri>();
+			using (var httpClient = new HttpClient())
+			{
+				foreach (var uri in sitemapUris)
 				{
-					result.Add(tmpSitemap);
+					try
+					{
+						//We perform a head request because we don't care about the content here
+						var requestMessage = new HttpRequestMessage(HttpMethod.Head, uri);
+						var response = await httpClient.SendAsync(requestMessage);
+						
+						if (response.IsSuccessStatusCode)
+						{
+							result.Add(uri);
+						}
+					}
+					catch (WebException ex)
+					{
+						if (ex.Response != null)
+						{
+							continue;
+						}
+						
+						throw;
+					}
 				}
 			}
 
 			return result;
 		}
-
-		/// <summary>
-		/// Retrieves a Sitemap from the specified location.
-		/// </summary>
-		/// <param name="sitemapLocation"></param>
-		/// <returns></returns>
-		public SitemapFile RetrieveSitemap(Uri sitemapLocation)
+		
+		public async Task<SitemapFile> GetSitemap(Uri sitemapUrl)
 		{
-			return RetrieveSitemap(sitemapLocation, new SitemapFetchOptions());
-		}
-		/// <summary>
-		/// Retrieves a Sitemap from the specified location.
-		/// </summary>
-		/// <param name="sitemapLocationString"></param>
-		/// <returns></returns>
-		public SitemapFile RetrieveSitemap(string sitemapLocationString)
-		{
-			var sitemapLocation = new Uri(sitemapLocationString);
-			return RetrieveSitemap(sitemapLocation, new SitemapFetchOptions());
-		}
+			var request = WebRequest.CreateHttp(sitemapUrl);
+			request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
 
-		/// <summary>
-		/// Retrieves a Sitemap from the specified location with the specified fetch options.
-		/// </summary>
-		/// <param name="sitemapLocation"></param>
-		/// <param name="options"></param>
-		/// <returns></returns>
-		public SitemapFile RetrieveSitemap(Uri sitemapLocation, SitemapFetchOptions options)
-		{
-			var type = GetSitemapType(sitemapLocation);
-
-			//Perform sitemap type-check
-			if (type == SitemapType.Unknown)
+			try
 			{
-				if (options.ThrowExceptionOnUnknownType)
+				using (var response = await request.GetResponseAsync())
+				using (var responseStream = response.GetResponseStream())
+				using (var streamReader = new StreamReader(responseStream))
 				{
-					throw new NotSupportedException("Specified sitemap is unsupported!");
+					if (SitemapTypeMapping.ContainsKey(response.ContentType))
+					{
+						var sitemapType = SitemapTypeMapping[response.ContentType];
+						if (SitemapParsers.ContainsKey(sitemapType))
+						{
+							var reader = SitemapParsers[sitemapType];
+							return reader.ParseSitemap(streamReader);
+						}
+						else
+						{
+							throw new InvalidOperationException($"No sitemap readers for {sitemapType}");
+						}
+					}
+					else
+					{
+						throw new InvalidOperationException($"Unknown sitemap content type {response.ContentType}");
+					}
 				}
-				else
+			}
+			catch (WebException ex)
+			{
+				if (ex.Response != null)
 				{
 					return null;
 				}
+
+				throw;
 			}
+		}
 
-			var rawSitemap = requestService.RetrieveRawSitemap(sitemapLocation);
-			var parsedSitemap = ParseSitemap(type, rawSitemap);
+		public async Task<IEnumerable<SitemapFile>> GetAllSitemapsForDomain(string domainName)
+		{
+			var sitemapFiles = new Dictionary<Uri, SitemapFile>();
+			var sitemapsUris = new Stack<Uri>(await DiscoverSitemaps(domainName));
 
-			if (parsedSitemap == null)
+			while (sitemapsUris.Count > 0)
 			{
-				return null;
-			}
-
-			//Set the location of the parsed sitemap
-			parsedSitemap.Location = sitemapLocation;
-
-			if (options.ApplyDomainRestrictions)
-			{
-				var validEntries = new List<SitemapEntry>();
-
-				//For every entry, check the host matches the sitemap it is specified in
-				foreach (var entry in parsedSitemap.Urls)
+				var sitemapUri = sitemapsUris.Pop();
+				
+				if (!sitemapFiles.ContainsKey(sitemapUri))
 				{
-					if (entry.Location.Host == sitemapLocation.Host)
+					var sitemapFile = await GetSitemap(sitemapUri);
+					sitemapFiles.Add(sitemapUri, sitemapFile);
+
+					foreach (var indexFile in sitemapFile.Sitemaps)
 					{
-						validEntries.Add(entry);
+						sitemapsUris.Push(indexFile.Location);
 					}
 				}
-
-				parsedSitemap.Urls = validEntries;
 			}
 
-			if (options.FetchInnerSitemaps)
-			{
-				var fetchedInnerSitemaps = new List<SitemapFile>();
-
-				//For every sitemap index, fetch the sitemap
-				foreach (var indexedSitemap in parsedSitemap.Sitemaps)
-				{
-					var tmpInnerSitemap = RetrieveSitemap(indexedSitemap.Location, options);
-
-					//Copy over the last modified from the sitemap index
-					tmpInnerSitemap.LastModified = indexedSitemap.LastModified;
-
-					fetchedInnerSitemaps.Add(tmpInnerSitemap);
-				}
-
-				parsedSitemap.Sitemaps = fetchedInnerSitemaps;
-			}
-
-			return parsedSitemap;
-		}
-
-		/// <summary>
-		/// Parse a sitemap with the <see cref="SitemapType"/> specified. 
-		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="rawSitemap"></param>
-		/// <returns></returns>
-		public SitemapFile ParseSitemap(SitemapType type, string rawSitemap)
-		{
-			if (rawSitemap == null)
-			{
-				return null;
-			}
-
-			ISitemapReader reader;
-			if (type == SitemapType.Xml)
-			{
-				reader = new XmlSitemapReader();
-				return reader.ParseSitemap(rawSitemap);
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-		/// <summary>
-		/// Flattens a list of sitemaps, taking all of the sitemap entries and combining into a single list. 
-		/// </summary>
-		/// <param name="sitemaps"></param>
-		/// <returns></returns>
-		public IEnumerable<SitemapEntry> FlattenSitemaps(IEnumerable<SitemapFile> sitemaps)
-		{
-			var sitemapEntries = new List<SitemapEntry>();
-
-			foreach (var sitemap in sitemaps)
-			{
-				var currentEntries = new List<SitemapEntry>();
-
-				if (sitemap.Sitemaps.Count() > 0)
-				{
-					//If there are inner sitemaps, grab their flattened sitemaps
-					var flattenedEntries = FlattenSitemaps(sitemap.Sitemaps);
-					currentEntries.AddRange(flattenedEntries);
-				}
-
-				if (sitemap.Urls != null)
-				{
-					currentEntries.AddRange(sitemap.Urls);
-				}
-
-				sitemapEntries.AddRange(currentEntries);
-			}
-
-			//De-dupe entries based on location
-			var dedupedEntries = sitemapEntries
-				.GroupBy(se => se.Location)
-				.Select(g => g.FirstOrDefault());
-
-			return dedupedEntries;
-		}
-
-		/// <summary>
-		/// From a given sitemap location, return the type of sitemap file.
-		/// </summary>
-		/// <param name="sitemapLocation"></param>
-		/// <returns></returns>
-		public SitemapType GetSitemapType(Uri sitemapLocation)
-		{
-			var path = sitemapLocation.AbsolutePath;
-
-			if (path.Contains(".xml") || path.Contains(".xml.gz"))
-			{
-				return SitemapType.Xml;
-			}
-			else
-			{
-				return SitemapType.Unknown;
-			}
+			return sitemapFiles.Values;
 		}
 	}
 }

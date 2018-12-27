@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,16 +11,16 @@ namespace TurnerSoftware.SitemapTools.Reader
 	/// <summary>
 	/// Based on the Sitemap specification described here: http://www.sitemaps.org/protocol.html
 	/// </summary>
-	public class XmlSitemapReader : ISitemapReader
+	public class XmlSitemapParser : ISitemapParser
 	{
-		public SitemapFile ParseSitemap(string rawSitemap)
+		public SitemapFile ParseSitemap(TextReader reader)
 		{
 			var result = new SitemapFile();
 			var document = new XmlDocument();
 			
 			try
 			{
-				document.LoadXml(rawSitemap);
+				document.Load(reader);
 			}
 			catch (XmlException)
 			{
@@ -42,7 +43,7 @@ namespace TurnerSoftware.SitemapTools.Reader
 				}
 				else if (topNode.Name.ToLower() == "sitemapindex")
 				{
-					var indexedSitemaps = new List<SitemapFile>();
+					var indexedSitemaps = new List<SitemapIndexEntry>();
 
 					foreach (XmlNode sitemapNode in topNode.ChildNodes)
 					{
@@ -57,9 +58,9 @@ namespace TurnerSoftware.SitemapTools.Reader
 			return result;
 		}
 
-		private SitemapFile ParseSitemapIndex(XmlNode sitemapNode)
+		private SitemapIndexEntry ParseSitemapIndex(XmlNode sitemapNode)
 		{
-			var result = new SitemapFile();
+			var result = new SitemapIndexEntry();
 			foreach (XmlNode urlDetail in sitemapNode.ChildNodes)
 			{
 				var nodeName = urlDetail.Name.ToLower();

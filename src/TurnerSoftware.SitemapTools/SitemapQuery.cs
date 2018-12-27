@@ -22,11 +22,13 @@ namespace TurnerSoftware.SitemapTools
 			SitemapTypeMapping = new Dictionary<string, SitemapType>
 			{
 				{ "text/xml", SitemapType.Xml },
-				{ "application/xml", SitemapType.Xml }
+				{ "application/xml", SitemapType.Xml },
+				{ "text/plain", SitemapType.Text }
 			};
 			SitemapParsers = new Dictionary<SitemapType, ISitemapParser>
 			{
-				{ SitemapType.Xml, new XmlSitemapParser() }
+				{ SitemapType.Xml, new XmlSitemapParser() },
+				{ SitemapType.Text, new TextSitemapParser() }
 			};
 		}
 		

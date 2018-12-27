@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace TurnerSoftware.SitemapTools.Reader
+namespace TurnerSoftware.SitemapTools.Parser
 {
 	/// <summary>
 	/// Based on the Sitemap specification described here: http://www.sitemaps.org/protocol.html
@@ -29,7 +29,9 @@ namespace TurnerSoftware.SitemapTools.Reader
 
 			foreach (XmlNode topNode in document.ChildNodes)
 			{
-				if (topNode.Name.ToLower() == "urlset")
+				var nodeName = topNode.Name;
+
+				if (nodeName.Equals("urlset", StringComparison.InvariantCultureIgnoreCase))
 				{
 					var urls = new List<SitemapEntry>();
 
@@ -41,7 +43,7 @@ namespace TurnerSoftware.SitemapTools.Reader
 
 					result.Urls = urls;
 				}
-				else if (topNode.Name.ToLower() == "sitemapindex")
+				else if (nodeName.Equals("sitemapindex", StringComparison.InvariantCultureIgnoreCase))
 				{
 					var indexedSitemaps = new List<SitemapIndexEntry>();
 
@@ -63,21 +65,19 @@ namespace TurnerSoftware.SitemapTools.Reader
 			var result = new SitemapIndexEntry();
 			foreach (XmlNode urlDetail in sitemapNode.ChildNodes)
 			{
-				var nodeName = urlDetail.Name.ToLower();
+				var nodeName = urlDetail.Name;
 				var nodeValue = urlDetail.InnerText;
 
-				if (nodeName == "loc")
+				if (nodeName.Equals("loc", StringComparison.InvariantCultureIgnoreCase))
 				{
-					Uri tmpUri;
-					if (Uri.TryCreate(nodeValue, UriKind.Absolute, out tmpUri))
+					if (Uri.TryCreate(nodeValue, UriKind.Absolute, out var tmpUri))
 					{
 						result.Location = tmpUri;
 					}
 				}
-				else if (nodeName == "lastmod")
+				else if (nodeName.Equals("lastmod", StringComparison.InvariantCultureIgnoreCase))
 				{
-					DateTime tmpLastModified;
-					if (DateTime.TryParse(nodeValue, out tmpLastModified))
+					if (DateTime.TryParse(nodeValue, out var tmpLastModified))
 					{
 						result.LastModified = tmpLastModified;
 					}
@@ -94,30 +94,27 @@ namespace TurnerSoftware.SitemapTools.Reader
 				var nodeName = urlDetail.Name.ToLower();
 				var nodeValue = urlDetail.InnerText;
 
-				if (nodeName == "loc")
+				if (nodeName.Equals("loc", StringComparison.InvariantCultureIgnoreCase))
 				{
-					Uri tmpUri;
-					if (Uri.TryCreate(nodeValue, UriKind.Absolute, out tmpUri))
+					if (Uri.TryCreate(nodeValue, UriKind.Absolute, out var tmpUri))
 					{
 						result.Location = tmpUri;
 					}
 				}
-				else if (nodeName == "lastmod")
+				else if (nodeName.Equals("lastmod", StringComparison.InvariantCultureIgnoreCase))
 				{
-					DateTime tmpLastModified;
-					if (DateTime.TryParse(nodeValue, out tmpLastModified))
+					if (DateTime.TryParse(nodeValue, out var tmpLastModified))
 					{
 						result.LastModified = tmpLastModified;
 					}
 				}
-				else if (nodeName == "changefreq")
+				else if (nodeName.Equals("changefreq", StringComparison.InvariantCultureIgnoreCase))
 				{
 					result.ChangeFrequency = ParseChangeFrequency(nodeValue);
 				}
-				else if (nodeName == "priority")
+				else if (nodeName.Equals("priority", StringComparison.InvariantCultureIgnoreCase))
 				{
-					decimal tmpPriority;
-					if (decimal.TryParse(nodeValue, out tmpPriority))
+					if (decimal.TryParse(nodeValue, out var tmpPriority))
 					{
 						result.Priority = tmpPriority;
 					}

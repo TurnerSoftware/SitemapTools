@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TurnerSoftware.SitemapTools.Reader
+namespace TurnerSoftware.SitemapTools.Parser
 {
 	public interface ISitemapParser
 	{

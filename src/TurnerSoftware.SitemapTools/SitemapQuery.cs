@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using TurnerSoftware.SitemapTools.Reader;
+using TurnerSoftware.SitemapTools.Parser;
 using System.Net.Http;
 using TurnerSoftware.RobotsExclusionTools;
 

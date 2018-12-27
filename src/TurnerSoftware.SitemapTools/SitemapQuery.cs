@@ -31,7 +31,24 @@ namespace TurnerSoftware.SitemapTools
 				{ SitemapType.Text, new TextSitemapParser() }
 			};
 		}
-		
+
+		private HttpClient HttpClient { get; }
+
+		public SitemapQuery()
+		{
+			var clientHandler = new HttpClientHandler
+			{
+				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+			};
+
+			HttpClient = new HttpClient(clientHandler);
+		}
+
+		public SitemapQuery(HttpClient client)
+		{
+			HttpClient = client;
+		}
+
 		public async Task<IEnumerable<Uri>> DiscoverSitemaps(string domainName)
 		{
 			var uriBuilder = new UriBuilder("http", domainName);
@@ -50,30 +67,27 @@ namespace TurnerSoftware.SitemapTools
 			sitemapUris = sitemapUris.Distinct().ToList();
 			
 			var result = new HashSet<Uri>();
-			using (var httpClient = new HttpClient())
+			foreach (var uri in sitemapUris)
 			{
-				foreach (var uri in sitemapUris)
+				try
 				{
-					try
+					//We perform a head request because we don't care about the content here
+					var requestMessage = new HttpRequestMessage(HttpMethod.Head, uri);
+					var response = await HttpClient.SendAsync(requestMessage);
+
+					if (response.IsSuccessStatusCode)
 					{
-						//We perform a head request because we don't care about the content here
-						var requestMessage = new HttpRequestMessage(HttpMethod.Head, uri);
-						var response = await httpClient.SendAsync(requestMessage);
-						
-						if (response.IsSuccessStatusCode)
-						{
-							result.Add(uri);
-						}
+						result.Add(uri);
 					}
-					catch (WebException ex)
+				}
+				catch (WebException ex)
+				{
+					if (ex.Response != null)
 					{
-						if (ex.Response != null)
-						{
-							continue;
-						}
-						
-						throw;
+						continue;
 					}
+
+					throw;
 				}
 			}
 
@@ -82,22 +96,26 @@ namespace TurnerSoftware.SitemapTools
 		
 		public async Task<SitemapFile> GetSitemap(Uri sitemapUrl)
 		{
-			var request = WebRequest.CreateHttp(sitemapUrl);
-			request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-
 			try
 			{
-				using (var response = await request.GetResponseAsync())
-				using (var responseStream = response.GetResponseStream())
-				using (var streamReader = new StreamReader(responseStream))
+				var response = await HttpClient.GetAsync(sitemapUrl);
+				
+				if (response.IsSuccessStatusCode)
 				{
-					if (SitemapTypeMapping.ContainsKey(response.ContentType))
+					var contentType = response.Content.Headers.ContentType.MediaType;
+					
+					if (SitemapTypeMapping.ContainsKey(contentType))
 					{
-						var sitemapType = SitemapTypeMapping[response.ContentType];
+						var sitemapType = SitemapTypeMapping[contentType];
 						if (SitemapParsers.ContainsKey(sitemapType))
 						{
 							var reader = SitemapParsers[sitemapType];
-							return reader.ParseSitemap(streamReader);
+
+							using (var stream = await response.Content.ReadAsStreamAsync())
+							using (var streamReader = new StreamReader(stream))
+							{
+								return reader.ParseSitemap(streamReader);
+							}
 						}
 						else
 						{
@@ -106,9 +124,11 @@ namespace TurnerSoftware.SitemapTools
 					}
 					else
 					{
-						throw new InvalidOperationException($"Unknown sitemap content type {response.ContentType}");
+						throw new InvalidOperationException($"Unknown sitemap content type {contentType}");
 					}
 				}
+
+				return null;
 			}
 			catch (WebException ex)
 			{

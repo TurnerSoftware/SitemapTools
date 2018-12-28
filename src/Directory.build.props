@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionPrefix>0.2.0</VersionPrefix>
 
     <RootNamespace>TurnerSoftware.SitemapTools</RootNamespace>
 
@@ -10,7 +10,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/TurnerSoftware/SitemapTools/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/TurnerSoftware/SitemapTools</PackageProjectUrl>
-    <PackageBaseTags>utilities;robots</PackageBaseTags>
+    <PackageBaseTags>utilities;sitemap;sitemap.xml;sitemap.txt</PackageBaseTags>
     
     <RepositoryUrl>https://github.com/TurnerSoftware/SitemapTools.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

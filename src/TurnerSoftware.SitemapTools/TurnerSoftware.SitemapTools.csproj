@@ -1,17 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.1.0</Version>
+
+    <AssemblyName>TurnerSoftware.SitemapTools</AssemblyName>
+    <Description>A sitemap (sitemap.xml) parsing and querying library in C#</Description>
+    <PackageTags>$(PackageBaseTags)</PackageTags>
     <Authors>James Turner</Authors>
-    <Company>Turner Software</Company>
-    <Description>A collection of tools for fetching and processing sitemap files</Description>
-    <Copyright>Copyright 2018</Copyright>
-    <PackageLicenseUrl>https://github.com/TurnerSoftware/SitemapTools/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/TurnerSoftware/SitemapTools</PackageProjectUrl>
-    <PackageTags>sitemap sitemap.xml</PackageTags>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

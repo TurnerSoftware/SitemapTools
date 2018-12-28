@@ -1,1 +1,3 @@
-﻿Sitemap: http://localhost/example-sitemap.xml
+﻿Sitemap: http://localhost/basic-sitemap.xml
+Sitemap: http://localhost/not-a-real-sitemap.xml
+Sitemap: http://localhost/text-sitemap.txt

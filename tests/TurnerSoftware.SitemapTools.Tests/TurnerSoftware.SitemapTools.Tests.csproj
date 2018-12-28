@@ -7,11 +7,40 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\example-sitemap.xml" />
+    <None Remove="Resources\another-indexed-sitemap.xml" />
+    <None Remove="Resources\another-text-sitemap.txt" />
+    <None Remove="Resources\basic-sitemap.xml" />
+    <None Remove="Resources\gzipped-sitemap.xml" />
+    <None Remove="Resources\gzipped-sitemap.xml.gz" />
+    <None Remove="Resources\last-text-sitemap.txt" />
+    <None Remove="Resources\robots.txt" />
+    <None Remove="Resources\sitemap.xml" />
+    <None Remove="Resources\text-sitemap.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\example-sitemap.xml">
+    <Content Include="Resources\another-text-sitemap.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\basic-sitemap.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\gzipped-sitemap.xml.gz">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\last-text-sitemap.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\robots.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\another-indexed-sitemap.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\sitemap.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\text-sitemap.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

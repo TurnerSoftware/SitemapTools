@@ -114,7 +114,7 @@ namespace TurnerSoftware.SitemapTools.Parser
 				}
 				else if (nodeName.Equals("priority", StringComparison.InvariantCultureIgnoreCase))
 				{
-					if (decimal.TryParse(nodeValue, out var tmpPriority))
+					if (double.TryParse(nodeValue, out var tmpPriority))
 					{
 						result.Priority = tmpPriority;
 					}

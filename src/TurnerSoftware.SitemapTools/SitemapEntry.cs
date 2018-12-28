@@ -11,11 +11,11 @@ namespace TurnerSoftware.SitemapTools
 		public Uri Location { get; set; }
 		public DateTime? LastModified { get; set; }
 		public ChangeFrequency? ChangeFrequency { get; set; }
-		public decimal Priority { get; set; }
+		public double Priority { get; set; }
 
 		public SitemapEntry()
 		{
-			Priority = 0.5M;
+			Priority = 0.5;
 		}
 	}
 }

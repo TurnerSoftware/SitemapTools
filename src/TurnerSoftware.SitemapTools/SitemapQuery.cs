@@ -104,6 +104,14 @@ namespace TurnerSoftware.SitemapTools
 				if (response.IsSuccessStatusCode)
 				{
 					var contentType = response.Content.Headers.ContentType.MediaType;
+					var requiresManualDecompression = false;
+
+					if (contentType.Equals("application/x-gzip", StringComparison.InvariantCultureIgnoreCase))
+					{
+						requiresManualDecompression = true;
+						var baseFileName = Path.GetFileNameWithoutExtension(sitemapUrl.AbsolutePath);
+						contentType = MimeTypes.GetMimeType(baseFileName);
+					}
 					
 					if (SitemapTypeMapping.ContainsKey(contentType))
 					{
@@ -113,9 +121,17 @@ namespace TurnerSoftware.SitemapTools
 							var reader = SitemapParsers[sitemapType];
 
 							using (var stream = await response.Content.ReadAsStreamAsync())
-							using (var streamReader = new StreamReader(stream))
 							{
-								return reader.ParseSitemap(streamReader);
+								var contentStream = stream;
+								if (requiresManualDecompression)
+								{
+									contentStream = new GZipStream(contentStream, CompressionMode.Decompress);
+								}
+
+								using (var streamReader = new StreamReader(contentStream))
+								{
+									return reader.ParseSitemap(streamReader);
+								}
 							}
 						}
 						else

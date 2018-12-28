@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url>
       <loc>http://www.example.com/</loc>
-      <lastmod>2005-01-01</lastmod>
+      <lastmod>2005-01-02</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
@@ -24,4 +24,32 @@
       <loc>http://www.example.com/catalog?item=83&amp;desc=vacation_usa</loc>
       <lastmod>2004-11-23</lastmod>
    </url>
+  <url>
+    <loc>http://www.example.com/frequency/always</loc>
+    <changefreq>always</changefreq>
+  </url>
+  <url>
+    <loc>http://www.example.com/frequency/hourly</loc>
+    <changefreq>hourly</changefreq>
+  </url>
+  <url>
+    <loc>http://www.example.com/frequency/daily</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>http://www.example.com/frequency/weekly</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>http://www.example.com/frequency/monthly</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://www.example.com/frequency/yearly</loc>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>http://www.example.com/frequency/never</loc>
+    <changefreq>never</changefreq>
+  </url>
 </urlset>

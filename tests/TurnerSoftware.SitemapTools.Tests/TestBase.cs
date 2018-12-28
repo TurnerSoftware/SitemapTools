@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TurnerSoftware.SitemapTools.Tests.Server;
 
@@ -29,6 +30,12 @@ namespace TurnerSoftware.SitemapTools.Tests
 		{
 			var client = TestConfiguration.GetHttpClient();
 			return new UriBuilder(client.BaseAddress);
+		}
+
+		protected StreamReader LoadResource(string name)
+		{
+			var fileStream = new FileStream($"Resources/{name}", FileMode.Open);
+			return new StreamReader(fileStream);
 		}
 	}
 }

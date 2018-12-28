@@ -62,9 +62,10 @@ namespace TurnerSoftware.SitemapTools
 				defaultSitemapUri
 			};
 
-			var robotsFile = await new RobotsParser().FromUriAsync(baseUri);
-			sitemapUris.AddRange(robotsFile.SitemapEntries.Select(s => s.Sitemap));
-			sitemapUris = sitemapUris.Distinct().ToList();
+			//TODO: Need to release new version of RobotsParser with ability to pass a HttpClient
+			//var robotsFile = await new RobotsParser().FromUriAsync(baseUri);
+			//sitemapUris.AddRange(robotsFile.SitemapEntries.Select(s => s.Sitemap));
+			//sitemapUris = sitemapUris.Distinct().ToList();
 			
 			var result = new HashSet<Uri>();
 			foreach (var uri in sitemapUris)

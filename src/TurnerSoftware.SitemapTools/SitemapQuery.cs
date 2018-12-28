@@ -118,7 +118,7 @@ namespace TurnerSoftware.SitemapTools
 						var sitemapType = SitemapTypeMapping[contentType];
 						if (SitemapParsers.ContainsKey(sitemapType))
 						{
-							var reader = SitemapParsers[sitemapType];
+							var parser = SitemapParsers[sitemapType];
 
 							using (var stream = await response.Content.ReadAsStreamAsync())
 							{
@@ -130,7 +130,9 @@ namespace TurnerSoftware.SitemapTools
 
 								using (var streamReader = new StreamReader(contentStream))
 								{
-									return reader.ParseSitemap(streamReader);
+									var sitemap = parser.ParseSitemap(streamReader);
+									sitemap.Location = sitemapUrl;
+									return sitemap;
 								}
 							}
 						}
@@ -161,20 +163,20 @@ namespace TurnerSoftware.SitemapTools
 		public async Task<IEnumerable<SitemapFile>> GetAllSitemapsForDomain(string domainName)
 		{
 			var sitemapFiles = new Dictionary<Uri, SitemapFile>();
-			var sitemapsUris = new Stack<Uri>(await DiscoverSitemaps(domainName));
+			var sitemapUris = new Stack<Uri>(await DiscoverSitemaps(domainName));
 
-			while (sitemapsUris.Count > 0)
+			while (sitemapUris.Count > 0)
 			{
-				var sitemapUri = sitemapsUris.Pop();
-				
-				if (!sitemapFiles.ContainsKey(sitemapUri))
-				{
-					var sitemapFile = await GetSitemap(sitemapUri);
-					sitemapFiles.Add(sitemapUri, sitemapFile);
+				var sitemapUri = sitemapUris.Pop();
 
-					foreach (var indexFile in sitemapFile.Sitemaps)
+				var sitemapFile = await GetSitemap(sitemapUri);
+				sitemapFiles.Add(sitemapUri, sitemapFile);
+
+				foreach (var indexFile in sitemapFile.Sitemaps)
+				{
+					if (!sitemapFiles.ContainsKey(indexFile.Location))
 					{
-						sitemapsUris.Push(indexFile.Location);
+						sitemapUris.Push(indexFile.Location);
 					}
 				}
 			}

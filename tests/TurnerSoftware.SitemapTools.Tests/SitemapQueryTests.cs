@@ -21,7 +21,7 @@ namespace TurnerSoftware.SitemapTools.Tests
 			var sitemap = await sitemapQuery.GetSitemap(uriBuilder.Uri);
 
 			Assert.AreEqual(0, sitemap.Sitemaps.Count());
-			Assert.AreEqual(5, sitemap.Urls.Count());
+			Assert.AreEqual(12, sitemap.Urls.Count());
 		}
 
 		[TestMethod]

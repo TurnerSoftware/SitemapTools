@@ -61,18 +61,16 @@ namespace TurnerSoftware.SitemapTools
 			{
 				defaultSitemapUri
 			};
-
-			//TODO: Need to release new version of RobotsParser with ability to pass a HttpClient
-			//var robotsFile = await new RobotsParser().FromUriAsync(baseUri);
-			//sitemapUris.AddRange(robotsFile.SitemapEntries.Select(s => s.Sitemap));
-			//sitemapUris = sitemapUris.Distinct().ToList();
+			
+			var robotsFile = await new RobotsParser(HttpClient).FromUriAsync(baseUri);
+			sitemapUris.AddRange(robotsFile.SitemapEntries.Select(s => s.Sitemap));
+			sitemapUris = sitemapUris.Distinct().ToList();
 			
 			var result = new HashSet<Uri>();
 			foreach (var uri in sitemapUris)
 			{
 				try
 				{
-					//We perform a head request because we don't care about the content here
 					var requestMessage = new HttpRequestMessage(HttpMethod.Head, uri);
 					var response = await HttpClient.SendAsync(requestMessage);
 

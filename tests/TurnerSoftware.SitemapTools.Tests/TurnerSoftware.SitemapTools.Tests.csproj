@@ -1,46 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\another-indexed-sitemap.xml" />
-    <None Remove="Resources\another-text-sitemap.txt" />
-    <None Remove="Resources\basic-sitemap.xml" />
-    <None Remove="Resources\gzipped-sitemap.xml" />
-    <None Remove="Resources\gzipped-sitemap.xml.gz" />
-    <None Remove="Resources\last-text-sitemap.txt" />
-    <None Remove="Resources\robots.txt" />
-    <None Remove="Resources\sitemap.xml" />
-    <None Remove="Resources\text-sitemap.txt" />
+    <None Remove="Resources\*.*" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\another-text-sitemap.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\basic-sitemap.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\gzipped-sitemap.xml.gz">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\last-text-sitemap.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\robots.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\another-indexed-sitemap.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\sitemap.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\text-sitemap.txt">
+    <Content Include="Resources\*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

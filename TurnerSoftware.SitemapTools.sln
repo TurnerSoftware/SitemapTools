@@ -1,14 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2002
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{B79203C9-7B50-4C91-A0AD-EAA6FBAABD53}"
 	ProjectSection(SolutionItems) = preProject
 		.appveyor.yml = .appveyor.yml
 		.codecov.yml = .codecov.yml
 		.editorconfig = .editorconfig
-		LICENSE = LICENSE
+		.gitignore = .gitignore
+		build.appveyor.ps1 = build.appveyor.ps1
+		build.ps1 = build.ps1
+		License.txt = License.txt
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -21,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F738FA56-D15
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AF69BE3F-20E7-40CA-85D7-64BF2EA14C15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurnerSoftware.SitemapTools.Tests", "tests\TurnerSoftware.SitemapTools.Tests\TurnerSoftware.SitemapTools.Tests.csproj", "{DD0521BB-2CDF-4DA5-9E76-4B87E4AA9D33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurnerSoftware.SitemapTools.Tests", "tests\TurnerSoftware.SitemapTools.Tests\TurnerSoftware.SitemapTools.Tests.csproj", "{DD0521BB-2CDF-4DA5-9E76-4B87E4AA9D33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

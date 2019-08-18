@@ -1,0 +1,4 @@
+{
+  "TestProject": "tests/TurnerSoftware.SitemapTools.Tests/TurnerSoftware.SitemapTools.Tests.csproj",
+  "TestCoverageFilter": "+[TurnerSoftware.SitemapTools]* -[TurnerSoftware.SitemapTools.Tests]*"
+}

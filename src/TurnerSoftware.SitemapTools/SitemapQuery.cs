@@ -14,7 +14,13 @@ namespace TurnerSoftware.SitemapTools
 {
 	public class SitemapQuery
 	{
+		/// <summary>
+		/// HTTP content type mapping against <see cref="SitemapType"/>.
+		/// </summary>
 		public static Dictionary<string, SitemapType> SitemapTypeMapping { get; }
+		/// <summary>
+		/// <see cref="SitemapType"/> mapping against <see cref="ISitemapParser"/>.
+		/// </summary>
 		public static Dictionary<SitemapType, ISitemapParser> SitemapParsers { get; }
 
 		static SitemapQuery()
@@ -34,6 +40,10 @@ namespace TurnerSoftware.SitemapTools
 
 		private HttpClient HttpClient { get; }
 
+		/// <summary>
+		/// Creates a <see cref="SitemapQuery"/> with a <see cref="global::System.Net.Http.HttpClient"/> configured
+		/// for automatic decompression.
+		/// </summary>
 		public SitemapQuery()
 		{
 			var clientHandler = new HttpClientHandler
@@ -44,11 +54,21 @@ namespace TurnerSoftware.SitemapTools
 			HttpClient = new HttpClient(clientHandler);
 		}
 
+		/// <summary>
+		/// Creates a <see cref="SitemapQuery"/> with the provided <see cref="global::System.Net.Http.HttpClient"/>.
+		/// </summary>
+		/// <param name="client"></param>
 		public SitemapQuery(HttpClient client)
 		{
 			HttpClient = client;
 		}
 
+		/// <summary>
+		/// Discovers available sitemaps for a given domain name, returning a list of sitemap URIs discovered.
+		/// The sitemaps are discovered from a combination of the site root and looking through the robots.txt file.
+		/// </summary>
+		/// <param name="domainName">The domain name to search</param>
+		/// <returns>List of found sitemap URIs</returns>
 		public async Task<IEnumerable<Uri>> DiscoverSitemaps(string domainName)
 		{
 			var uriBuilder = new UriBuilder("http", domainName);
@@ -93,6 +113,11 @@ namespace TurnerSoftware.SitemapTools
 			return result;
 		}
 		
+		/// <summary>
+		/// Retrieves a sitemap at the given URI, converting it to a <see cref="SitemapFile"/>.
+		/// </summary>
+		/// <param name="sitemapUrl">The URI where the sitemap exists.</param>
+		/// <returns>The found and converted <see cref="SitemapFile"/></returns>
 		public async Task<SitemapFile> GetSitemap(Uri sitemapUrl)
 		{
 			try
@@ -157,7 +182,13 @@ namespace TurnerSoftware.SitemapTools
 				throw;
 			}
 		}
-
+		
+		/// <summary>
+		/// Retrieves all sitemaps for a given domain. This effectively combines <see cref="DiscoverSitemaps(string)"/> and 
+		/// <see cref="GetSitemap(Uri)"/> while additionally finding any other sitemaps described in sitemap index files.
+		/// </summary>
+		/// <param name="domainName"></param>
+		/// <returns></returns>
 		public async Task<IEnumerable<SitemapFile>> GetAllSitemapsForDomain(string domainName)
 		{
 			var sitemapFiles = new Dictionary<Uri, SitemapFile>();

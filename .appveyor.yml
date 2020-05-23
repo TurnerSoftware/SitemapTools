@@ -4,7 +4,7 @@ skip_branch_with_pr: true
 
 install:
   - choco install opencover.portable codecov
-  - ps: .\build\dotnet-install.ps1 -Version 3.0.100-preview5-011568
+  - ps: .\build\dotnet-install.ps1 -Version 3.1.300
 
   
 build_script:

@@ -69,7 +69,7 @@ namespace TurnerSoftware.SitemapTools
 		/// </summary>
 		/// <param name="domainName">The domain name to search</param>
 		/// <returns>List of found sitemap URIs</returns>
-		public async Task<IEnumerable<Uri>> DiscoverSitemaps(string domainName)
+		public async Task<IEnumerable<Uri>> DiscoverSitemapsAsync(string domainName)
 		{
 			var uriBuilder = new UriBuilder("http", domainName);
 			var baseUri = uriBuilder.Uri;
@@ -118,7 +118,7 @@ namespace TurnerSoftware.SitemapTools
 		/// </summary>
 		/// <param name="sitemapUrl">The URI where the sitemap exists.</param>
 		/// <returns>The found and converted <see cref="SitemapFile"/></returns>
-		public async Task<SitemapFile> GetSitemap(Uri sitemapUrl)
+		public async Task<SitemapFile> GetSitemapAsync(Uri sitemapUrl)
 		{
 			try
 			{
@@ -184,21 +184,21 @@ namespace TurnerSoftware.SitemapTools
 		}
 		
 		/// <summary>
-		/// Retrieves all sitemaps for a given domain. This effectively combines <see cref="DiscoverSitemaps(string)"/> and 
-		/// <see cref="GetSitemap(Uri)"/> while additionally finding any other sitemaps described in sitemap index files.
+		/// Retrieves all sitemaps for a given domain. This effectively combines <see cref="DiscoverSitemapsAsync(string)"/> and 
+		/// <see cref="GetSitemapAsync(Uri)"/> while additionally finding any other sitemaps described in sitemap index files.
 		/// </summary>
 		/// <param name="domainName"></param>
 		/// <returns></returns>
-		public async Task<IEnumerable<SitemapFile>> GetAllSitemapsForDomain(string domainName)
+		public async Task<IEnumerable<SitemapFile>> GetAllSitemapsForDomainAsync(string domainName)
 		{
 			var sitemapFiles = new Dictionary<Uri, SitemapFile>();
-			var sitemapUris = new Stack<Uri>(await DiscoverSitemaps(domainName));
+			var sitemapUris = new Stack<Uri>(await DiscoverSitemapsAsync(domainName));
 
 			while (sitemapUris.Count > 0)
 			{
 				var sitemapUri = sitemapUris.Pop();
 
-				var sitemapFile = await GetSitemap(sitemapUri);
+				var sitemapFile = await GetSitemapAsync(sitemapUri);
 				sitemapFiles.Add(sitemapUri, sitemapFile);
 
 				foreach (var indexFile in sitemapFile.Sitemaps)

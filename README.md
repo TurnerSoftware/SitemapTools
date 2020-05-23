@@ -21,5 +21,5 @@ A sitemap (sitemap.xml) querying and parsing library in C#
 using TurnerSoftware.SitemapTools;
 
 var sitemapQuery = new SitemapQuery();
-var sitemapEntries = await sitemapQuery.GetAllSitemapsForDomain("example.org");
+var sitemapEntries = await sitemapQuery.GetAllSitemapsForDomainAsync("example.org");
 ```

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace TurnerSoftware.SitemapTools.Parser
@@ -77,7 +75,7 @@ namespace TurnerSoftware.SitemapTools.Parser
 				}
 				else if (nodeName.Equals("lastmod", StringComparison.InvariantCultureIgnoreCase))
 				{
-					if (DateTime.TryParse(nodeValue, out var tmpLastModified))
+					if (DateTime.TryParse(nodeValue, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out var tmpLastModified))
 					{
 						result.LastModified = tmpLastModified;
 					}
@@ -103,7 +101,7 @@ namespace TurnerSoftware.SitemapTools.Parser
 				}
 				else if (nodeName.Equals("lastmod", StringComparison.InvariantCultureIgnoreCase))
 				{
-					if (DateTime.TryParse(nodeValue, out var tmpLastModified))
+					if (DateTime.TryParse(nodeValue, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out var tmpLastModified))
 					{
 						result.LastModified = tmpLastModified;
 					}
@@ -114,7 +112,7 @@ namespace TurnerSoftware.SitemapTools.Parser
 				}
 				else if (nodeName.Equals("priority", StringComparison.InvariantCultureIgnoreCase))
 				{
-					if (double.TryParse(nodeValue, out var tmpPriority))
+					if (double.TryParse(nodeValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var tmpPriority))
 					{
 						result.Priority = tmpPriority;
 					}

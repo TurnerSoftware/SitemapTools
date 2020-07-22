@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -66,6 +67,19 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
+		public async Task GetSitemapAsyncCancelation()
+		{
+			var cts = new CancellationTokenSource(0);
+			var sitemapQuery = GetSitemapQuery();
+			var uriBuilder = GetTestServerUriBuilder();
+
+			uriBuilder.Path = "basic-sitemap.xml";
+			SitemapFile sitemap = null;
+			await Assert.ThrowsExceptionAsync<OperationCanceledException>(async () => sitemap = await sitemapQuery.GetSitemapAsync(uriBuilder.Uri, cts.Token));
+			Assert.AreEqual(null, sitemap);
+		}
+
+		[TestMethod]
 		public async Task DiscoverSitemapsAsync()
 		{
 			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
@@ -80,6 +94,16 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
+		public async Task DiscoverSitemapsAsyncCancelation()
+		{
+			var cts = new CancellationTokenSource(0);
+			var sitemapQuery = GetSitemapQuery();
+			IEnumerable<Uri> discoveredSitemaps = null;
+			await Assert.ThrowsExceptionAsync<OperationCanceledException>(async () => discoveredSitemaps = await sitemapQuery.DiscoverSitemapsAsync("localhost", cts.Token));
+			Assert.AreEqual(null, discoveredSitemaps);
+		}
+
+		[TestMethod]
 		public async Task GetAllSitemapsForDomainAsync()
 		{
 			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
@@ -91,6 +115,16 @@ namespace TurnerSoftware.SitemapTools.Tests
 
 				Assert.AreEqual(7, sitemaps.Count());
 			}
+		}
+
+		[TestMethod]
+		public async Task GetAllSitemapsForDomainAsyncCancelation()
+		{
+			var cts = new CancellationTokenSource(0);
+			var sitemapQuery = GetSitemapQuery();
+			IEnumerable<SitemapFile> sitemaps = null;
+			await Assert.ThrowsExceptionAsync<OperationCanceledException>(async () => sitemaps = await sitemapQuery.GetAllSitemapsForDomainAsync("localhost", cts.Token));
+			Assert.AreEqual(null, sitemaps);
 		}
 
 		[TestMethod]

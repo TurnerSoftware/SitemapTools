@@ -29,6 +29,43 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
+		public async Task GetSitemapAsyncNotFound()
+		{
+			var sitemapQuery = GetSitemapQuery();
+			var uriBuilder = GetTestServerUriBuilder();
+
+			uriBuilder.Path = "basic-sitemapNotFound.xml";
+			var sitemap = await sitemapQuery.GetSitemapAsync(uriBuilder.Uri);
+
+			Assert.AreEqual(null, sitemap);
+		}
+
+		[TestMethod]
+		public async Task GetSitemapAsyncWrongFormat()
+		{
+			var sitemapQuery = GetSitemapQuery();
+			var uriBuilder = GetTestServerUriBuilder();
+
+			uriBuilder.Path = "basic-sitemap-WrongFormat.xml";
+			var sitemap = await sitemapQuery.GetSitemapAsync(uriBuilder.Uri);
+
+			Assert.AreEqual(null, sitemap);
+		}
+
+		[TestMethod]
+		public async Task GetSitemapAsyncWrongFormatTxt()
+		{
+			var sitemapQuery = GetSitemapQuery();
+			var uriBuilder = GetTestServerUriBuilder();
+
+			uriBuilder.Path = "basic-sitemap-WrongFormat.txt";
+			var sitemap = await sitemapQuery.GetSitemapAsync(uriBuilder.Uri);
+
+			Assert.AreEqual(0, sitemap.Sitemaps.Count());
+			Assert.AreEqual(0, sitemap.Urls.Count());
+		}
+
+		[TestMethod]
 		public async Task DiscoverSitemapsAsync()
 		{
 			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))

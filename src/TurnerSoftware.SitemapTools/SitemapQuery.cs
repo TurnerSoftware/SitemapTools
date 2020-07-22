@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using TurnerSoftware.SitemapTools.Parser;
@@ -154,7 +153,8 @@ namespace TurnerSoftware.SitemapTools
 								using (var streamReader = new StreamReader(contentStream))
 								{
 									var sitemap = parser.ParseSitemap(streamReader);
-									sitemap.Location = sitemapUrl;
+									if (sitemap != null)
+										sitemap.Location = sitemapUrl;
 									return sitemap;
 								}
 							}

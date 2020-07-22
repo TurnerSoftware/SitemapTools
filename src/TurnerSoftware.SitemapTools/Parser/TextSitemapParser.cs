@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TurnerSoftware.SitemapTools.Parser
 {
 	public class TextSitemapParser : ISitemapParser
 	{
-		public SitemapFile ParseSitemap(TextReader reader)
+		public async Task<SitemapFile> ParseSitemapAsync(TextReader reader)
 		{
-			var result = new SitemapFile();
-			var line = string.Empty;
-
 			var sitemapEntries = new List<SitemapEntry>();
 
-			while ((line = reader.ReadLine()) != null)
+			string line;
+			while ((line = await reader.ReadLineAsync()) != null)
 			{
 				if (Uri.TryCreate(line, UriKind.Absolute, out var tmpUri))
 				{

@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TurnerSoftware.SitemapTools.Parser;
 
@@ -11,7 +12,7 @@ namespace TurnerSoftware.SitemapTools.Tests
 	public class TextSitemapParserTests : TestBase
 	{
 		[TestMethod]
-		public void ParseTextSitemap()
+		public async Task ParseTextSitemapAsync()
 		{
 			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
 			{
@@ -20,7 +21,7 @@ namespace TurnerSoftware.SitemapTools.Tests
 				using (var reader = LoadResource("text-sitemap.txt"))
 				{
 					var parser = new TextSitemapParser();
-					var sitemapFile = parser.ParseSitemap(reader);
+					var sitemapFile = await parser.ParseSitemapAsync(reader);
 
 					Assert.AreEqual(3, sitemapFile.Urls.Count());
 

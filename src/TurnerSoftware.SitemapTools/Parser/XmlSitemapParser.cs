@@ -75,7 +75,7 @@ namespace TurnerSoftware.SitemapTools.Parser
 				}
 				else if (nodeName.Equals("lastmod", StringComparison.InvariantCultureIgnoreCase))
 				{
-					if (DateTime.TryParse(nodeValue, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out var tmpLastModified))
+					if (DateTime.TryParse(nodeValue, CultureInfo.InvariantCulture, DateTimeStyles.None, out var tmpLastModified))
 					{
 						result.LastModified = tmpLastModified;
 					}
@@ -101,7 +101,7 @@ namespace TurnerSoftware.SitemapTools.Parser
 				}
 				else if (nodeName.Equals("lastmod", StringComparison.InvariantCultureIgnoreCase))
 				{
-					if (DateTime.TryParse(nodeValue, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out var tmpLastModified))
+					if (DateTime.TryParse(nodeValue, CultureInfo.InvariantCulture, DateTimeStyles.None, out var tmpLastModified))
 					{
 						result.LastModified = tmpLastModified;
 					}

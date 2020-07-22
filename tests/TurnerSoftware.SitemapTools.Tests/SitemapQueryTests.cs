@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TurnerSoftware.SitemapTools;
 
 namespace TurnerSoftware.SitemapTools.Tests
 {
@@ -14,45 +13,65 @@ namespace TurnerSoftware.SitemapTools.Tests
 		[TestMethod]
 		public async Task GetSitemapAsync()
 		{
-			var sitemapQuery = GetSitemapQuery();
-			var uriBuilder = GetTestServerUriBuilder();
+			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
+			{
+				Thread.CurrentThread.CurrentCulture = culture;
 
-			uriBuilder.Path = "basic-sitemap.xml";
-			var sitemap = await sitemapQuery.GetSitemapAsync(uriBuilder.Uri);
+				var sitemapQuery = GetSitemapQuery();
+				var uriBuilder = GetTestServerUriBuilder();
 
-			Assert.AreEqual(0, sitemap.Sitemaps.Count());
-			Assert.AreEqual(12, sitemap.Urls.Count());
+				uriBuilder.Path = "basic-sitemap.xml";
+				var sitemap = await sitemapQuery.GetSitemapAsync(uriBuilder.Uri);
+
+				Assert.AreEqual(0, sitemap.Sitemaps.Count());
+				Assert.AreEqual(12, sitemap.Urls.Count());
+			}
 		}
 
 		[TestMethod]
 		public async Task DiscoverSitemapsAsync()
 		{
-			var sitemapQuery = GetSitemapQuery();
-			var discoveredSitemaps = await sitemapQuery.DiscoverSitemapsAsync("localhost");
+			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
+			{
+				Thread.CurrentThread.CurrentCulture = culture;
 
-			Assert.AreEqual(3, discoveredSitemaps.Count());
+				var sitemapQuery = GetSitemapQuery();
+				var discoveredSitemaps = await sitemapQuery.DiscoverSitemapsAsync("localhost");
+
+				Assert.AreEqual(3, discoveredSitemaps.Count());
+			}
 		}
 
 		[TestMethod]
 		public async Task GetAllSitemapsForDomainAsync()
 		{
-			var sitemapQuery = GetSitemapQuery();
-			var sitemaps = await sitemapQuery.GetAllSitemapsForDomainAsync("localhost");
+			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
+			{
+				Thread.CurrentThread.CurrentCulture = culture;
 
-			Assert.AreEqual(7, sitemaps.Count());
+				var sitemapQuery = GetSitemapQuery();
+				var sitemaps = await sitemapQuery.GetAllSitemapsForDomainAsync("localhost");
+
+				Assert.AreEqual(7, sitemaps.Count());
+			}
 		}
 
 		[TestMethod]
 		public async Task SupportsGzippedSitemapAsync()
 		{
-			var sitemapQuery = GetSitemapQuery();
-			var uriBuilder = GetTestServerUriBuilder();
+			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
+			{
+				Thread.CurrentThread.CurrentCulture = culture;
 
-			uriBuilder.Path = "gzipped-sitemap.xml.gz";
-			var sitemap = await sitemapQuery.GetSitemapAsync(uriBuilder.Uri);
+				var sitemapQuery = GetSitemapQuery();
+				var uriBuilder = GetTestServerUriBuilder();
 
-			var gzipSitemapReference = new Uri("http://www.example.com/gzipped/");
-			Assert.IsTrue(sitemap.Urls.Any(u => u.Location == gzipSitemapReference));
+				uriBuilder.Path = "gzipped-sitemap.xml.gz";
+				var sitemap = await sitemapQuery.GetSitemapAsync(uriBuilder.Uri);
+
+				var gzipSitemapReference = new Uri("http://www.example.com/gzipped/");
+				Assert.IsTrue(sitemap.Urls.Any(u => u.Location == gzipSitemapReference));
+			}
 		}
 	}
 }

@@ -152,9 +152,11 @@ namespace TurnerSoftware.SitemapTools
 
 								using (var streamReader = new StreamReader(contentStream))
 								{
-									var sitemap = parser.ParseSitemap(streamReader);
+									var sitemap = await parser.ParseSitemapAsync(streamReader);
 									if (sitemap != null)
+									{
 										sitemap.Location = sitemapUrl;
+									}
 									return sitemap;
 								}
 							}

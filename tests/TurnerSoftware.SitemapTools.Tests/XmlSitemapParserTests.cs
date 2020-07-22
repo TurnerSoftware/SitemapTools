@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TurnerSoftware.SitemapTools.Parser;
 
@@ -11,7 +12,7 @@ namespace TurnerSoftware.SitemapTools.Tests
 	public class XmlSitemapParserTests : TestBase
 	{
 		[TestMethod]
-		public void ChangeFrequenciesAreSetCorrectly()
+		public async Task ChangeFrequenciesAreSetCorrectlyAsync()
 		{
 			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
 			{
@@ -20,7 +21,7 @@ namespace TurnerSoftware.SitemapTools.Tests
 				using (var reader = LoadResource("basic-sitemap.xml"))
 				{
 					var parser = new XmlSitemapParser();
-					var sitemapFile = parser.ParseSitemap(reader);
+					var sitemapFile = await parser.ParseSitemapAsync(reader);
 
 					var entries = sitemapFile.Urls.Where(e => e.Location.AbsolutePath.Contains("frequency/"));
 
@@ -56,7 +57,7 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
-		public void ParseIndexFile()
+		public async Task ParseIndexFileAsync()
 		{
 			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
 			{
@@ -65,7 +66,7 @@ namespace TurnerSoftware.SitemapTools.Tests
 				using (var reader = LoadResource("another-indexed-sitemap.xml"))
 				{
 					var parser = new XmlSitemapParser();
-					var sitemapFile = parser.ParseSitemap(reader);
+					var sitemapFile = await parser.ParseSitemapAsync(reader);
 
 					Assert.AreEqual(1, sitemapFile.Sitemaps.Count());
 
@@ -77,7 +78,7 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
-		public void ParseSitemapFile()
+		public async Task ParseSitemapFileAsync()
 		{
 			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
 			{
@@ -86,7 +87,7 @@ namespace TurnerSoftware.SitemapTools.Tests
 				using (var reader = LoadResource("basic-sitemap.xml"))
 				{
 					var parser = new XmlSitemapParser();
-					var sitemapFile = parser.ParseSitemap(reader);
+					var sitemapFile = await parser.ParseSitemapAsync(reader);
 
 					Assert.AreEqual(12, sitemapFile.Urls.Count());
 

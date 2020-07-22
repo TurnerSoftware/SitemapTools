@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace TurnerSoftware.SitemapTools.Parser
 {
@@ -11,29 +13,35 @@ namespace TurnerSoftware.SitemapTools.Parser
 	/// </summary>
 	public class XmlSitemapParser : ISitemapParser
 	{
-		public SitemapFile ParseSitemap(TextReader reader)
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+		public async Task<SitemapFile> ParseSitemapAsync(TextReader reader)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 		{
 			var result = new SitemapFile();
-			var document = new XmlDocument();
-			
+			XDocument document;
+
 			try
 			{
-				document.Load(reader);
+#if NETSTANDARD2_1
+				document = await XDocument.LoadAsync(reader, LoadOptions.None, default);
+#else
+				document = XDocument.Load(reader, LoadOptions.None);
+#endif
 			}
 			catch (XmlException)
 			{
 				return null;
 			}
 
-			foreach (XmlNode topNode in document.ChildNodes)
+			foreach (var topNode in document.Elements())
 			{
-				var nodeName = topNode.Name;
+				var nodeName = topNode.Name.LocalName;
 
 				if (nodeName.Equals("urlset", StringComparison.InvariantCultureIgnoreCase))
 				{
 					var urls = new List<SitemapEntry>();
 
-					foreach (XmlNode urlNode in topNode.ChildNodes)
+					foreach (var urlNode in topNode.Elements())
 					{
 						var sitemapEntry = ParseSitemapEntry(urlNode);
 						urls.Add(sitemapEntry);
@@ -45,7 +53,7 @@ namespace TurnerSoftware.SitemapTools.Parser
 				{
 					var indexedSitemaps = new List<SitemapIndexEntry>();
 
-					foreach (XmlNode sitemapNode in topNode.ChildNodes)
+					foreach (var sitemapNode in topNode.Elements())
 					{
 						var indexedSitemap = ParseSitemapIndex(sitemapNode);
 						indexedSitemaps.Add(indexedSitemap);
@@ -58,13 +66,13 @@ namespace TurnerSoftware.SitemapTools.Parser
 			return result;
 		}
 
-		private SitemapIndexEntry ParseSitemapIndex(XmlNode sitemapNode)
+		private SitemapIndexEntry ParseSitemapIndex(XElement sitemapNode)
 		{
 			var result = new SitemapIndexEntry();
-			foreach (XmlNode urlDetail in sitemapNode.ChildNodes)
+			foreach (var urlDetail in sitemapNode.Elements())
 			{
-				var nodeName = urlDetail.Name;
-				var nodeValue = urlDetail.InnerText;
+				var nodeName = urlDetail.Name.LocalName;
+				var nodeValue = urlDetail.Value;
 
 				if (nodeName.Equals("loc", StringComparison.InvariantCultureIgnoreCase))
 				{
@@ -84,13 +92,13 @@ namespace TurnerSoftware.SitemapTools.Parser
 			return result;
 		}
 
-		private SitemapEntry ParseSitemapEntry(XmlNode urlNode)
+		private SitemapEntry ParseSitemapEntry(XElement urlNode)
 		{
 			var result = new SitemapEntry();
-			foreach (XmlNode urlDetail in urlNode.ChildNodes)
+			foreach (var urlDetail in urlNode.Elements())
 			{
-				var nodeName = urlDetail.Name.ToLower();
-				var nodeValue = urlDetail.InnerText;
+				var nodeName = urlDetail.Name.LocalName;
+				var nodeValue = urlDetail.Value;
 
 				if (nodeName.Equals("loc", StringComparison.InvariantCultureIgnoreCase))
 				{

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -14,7 +15,7 @@ namespace TurnerSoftware.SitemapTools.Parser
 	public class XmlSitemapParser : ISitemapParser
 	{
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-		public async Task<SitemapFile> ParseSitemapAsync(TextReader reader)
+		public async Task<SitemapFile> ParseSitemapAsync(TextReader reader, CancellationToken cancellationToken = default)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 		{
 			var result = new SitemapFile();
@@ -23,9 +24,10 @@ namespace TurnerSoftware.SitemapTools.Parser
 			try
 			{
 #if NETSTANDARD2_1
-				document = await XDocument.LoadAsync(reader, LoadOptions.None, default);
+				document = await XDocument.LoadAsync(reader, LoadOptions.None, cancellationToken);
 #else
 				document = XDocument.Load(reader, LoadOptions.None);
+				cancellationToken.ThrowIfCancellationRequested();
 #endif
 			}
 			catch (XmlException)

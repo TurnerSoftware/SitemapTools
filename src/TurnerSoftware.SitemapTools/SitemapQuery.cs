@@ -8,6 +8,7 @@ using System.IO;
 using TurnerSoftware.SitemapTools.Parser;
 using System.Net.Http;
 using TurnerSoftware.RobotsExclusionTools;
+using System.Threading;
 
 namespace TurnerSoftware.SitemapTools
 {
@@ -68,7 +69,7 @@ namespace TurnerSoftware.SitemapTools
 		/// </summary>
 		/// <param name="domainName">The domain name to search</param>
 		/// <returns>List of found sitemap URIs</returns>
-		public async Task<IEnumerable<Uri>> DiscoverSitemapsAsync(string domainName)
+		public async Task<IEnumerable<Uri>> DiscoverSitemapsAsync(string domainName, CancellationToken cancellationToken = default)
 		{
 			var uriBuilder = new UriBuilder("http", domainName);
 			var baseUri = uriBuilder.Uri;
@@ -82,6 +83,7 @@ namespace TurnerSoftware.SitemapTools
 			};
 			
 			var robotsFile = await new RobotsFileParser(HttpClient).FromUriAsync(baseUri);
+			cancellationToken.ThrowIfCancellationRequested();
 			sitemapUris.AddRange(robotsFile.SitemapEntries.Select(s => s.Sitemap));
 			sitemapUris = sitemapUris.Distinct().ToList();
 			
@@ -91,7 +93,7 @@ namespace TurnerSoftware.SitemapTools
 				try
 				{
 					var requestMessage = new HttpRequestMessage(HttpMethod.Head, uri);
-					var response = await HttpClient.SendAsync(requestMessage);
+					var response = await HttpClient.SendAsync(requestMessage, cancellationToken);
 
 					if (response.IsSuccessStatusCode)
 					{
@@ -117,11 +119,11 @@ namespace TurnerSoftware.SitemapTools
 		/// </summary>
 		/// <param name="sitemapUrl">The URI where the sitemap exists.</param>
 		/// <returns>The found and converted <see cref="SitemapFile"/></returns>
-		public async Task<SitemapFile> GetSitemapAsync(Uri sitemapUrl)
+		public async Task<SitemapFile> GetSitemapAsync(Uri sitemapUrl, CancellationToken cancellationToken = default)
 		{
 			try
 			{
-				var response = await HttpClient.GetAsync(sitemapUrl);
+				var response = await HttpClient.GetAsync(sitemapUrl, cancellationToken);
 				
 				if (response.IsSuccessStatusCode)
 				{
@@ -144,6 +146,7 @@ namespace TurnerSoftware.SitemapTools
 
 							using (var stream = await response.Content.ReadAsStreamAsync())
 							{
+								cancellationToken.ThrowIfCancellationRequested();
 								var contentStream = stream;
 								if (requiresManualDecompression)
 								{
@@ -152,7 +155,7 @@ namespace TurnerSoftware.SitemapTools
 
 								using (var streamReader = new StreamReader(contentStream))
 								{
-									var sitemap = await parser.ParseSitemapAsync(streamReader);
+									var sitemap = await parser.ParseSitemapAsync(streamReader, cancellationToken);
 									if (sitemap != null)
 									{
 										sitemap.Location = sitemapUrl;
@@ -191,16 +194,16 @@ namespace TurnerSoftware.SitemapTools
 		/// </summary>
 		/// <param name="domainName"></param>
 		/// <returns></returns>
-		public async Task<IEnumerable<SitemapFile>> GetAllSitemapsForDomainAsync(string domainName)
+		public async Task<IEnumerable<SitemapFile>> GetAllSitemapsForDomainAsync(string domainName, CancellationToken cancellationToken = default)
 		{
 			var sitemapFiles = new Dictionary<Uri, SitemapFile>();
-			var sitemapUris = new Stack<Uri>(await DiscoverSitemapsAsync(domainName));
+			var sitemapUris = new Stack<Uri>(await DiscoverSitemapsAsync(domainName, cancellationToken));
 
 			while (sitemapUris.Count > 0)
 			{
 				var sitemapUri = sitemapUris.Pop();
 
-				var sitemapFile = await GetSitemapAsync(sitemapUri);
+				var sitemapFile = await GetSitemapAsync(sitemapUri, cancellationToken);
 				sitemapFiles.Add(sitemapUri, sitemapFile);
 
 				foreach (var indexFile in sitemapFile.Sitemaps)

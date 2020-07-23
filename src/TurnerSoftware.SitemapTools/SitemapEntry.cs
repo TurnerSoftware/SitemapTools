@@ -67,39 +67,11 @@ namespace TurnerSoftware.SitemapTools
 
 		public bool Equals(Uri other) => this == other;
 
-		public static bool operator ==(SitemapEntry x, SitemapEntry y)
-		{
-			if (ReferenceEquals(x, y))
-				return true;
-
-			{
-				if (ReferenceEquals(x, null))
-					return y.Location == null;
-			}
-
-			if (ReferenceEquals(y, null))
-				return x.Location == null;
-
-			return x.Location == y.Location;
-		}
+		public static bool operator ==(SitemapEntry x, SitemapEntry y) => x?.Location == y?.Location;
 
 		public static bool operator !=(SitemapEntry x, SitemapEntry y) => !(x == y);
 
-		public static bool operator ==(SitemapEntry x, Uri y)
-		{
-			if (ReferenceEquals(x, y))
-				return true;
-
-			{
-				if (ReferenceEquals(x, null))
-					return false;
-			}
-
-			if (ReferenceEquals(y, null))
-				return x.Location == null;
-
-			return x.Location == y;
-		}
+		public static bool operator ==(SitemapEntry x, Uri y) => x?.Location == y;
 
 		public static bool operator !=(SitemapEntry x, Uri y) => !(x == y);
 

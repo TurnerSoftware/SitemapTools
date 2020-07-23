@@ -90,6 +90,8 @@ namespace TurnerSoftware.SitemapTools
 			var result = new HashSet<Uri>();
 			foreach (var uri in sitemapUris)
 			{
+				cancellationToken.ThrowIfCancellationRequested();
+
 				try
 				{
 					var requestMessage = new HttpRequestMessage(HttpMethod.Head, uri);

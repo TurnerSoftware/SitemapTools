@@ -5,7 +5,7 @@ namespace TurnerSoftware.SitemapTools
 	/// <summary>
 	/// The individual entry in a sitemap file.
 	/// </summary>
-	public class SitemapEntry: IEquatable<SitemapEntry>, IEquatable<Uri>
+	public class SitemapEntry : IEquatable<SitemapEntry>, IEquatable<Uri>
 	{
 		/// <summary>
 		/// The location of the resource pointed towards by the sitemap file.
@@ -31,47 +31,45 @@ namespace TurnerSoftware.SitemapTools
 
 		#region Equality comparisons
 
-		public override int GetHashCode()
-		{
-			if (ReferenceEquals(this, null))
-				return default(Uri).GetHashCode();
-			return Location.GetHashCode();
-		}
+		public override int GetHashCode() => Location?.GetHashCode() ?? base.GetHashCode();
 
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(this, obj))
-				return true;
-		
+			if (obj is SitemapEntry sitemapEntry)
 			{
-				if (ReferenceEquals(this, null))
-					return (obj is SitemapEntry other) && other.Location == null;
+				return Equals(sitemapEntry);
 			}
 
-			if (ReferenceEquals(obj, null))
-				return Location == null;
-
+			if (obj is Uri locationUri)
 			{
-				if (obj is SitemapEntry other)
-					return Location == other.Location;
+				return Equals(locationUri);
 			}
 
-			{
-				if (obj is Uri other)
-					return Location == other;
-			}
 			return false;
 		}
 
-		public bool Equals(SitemapEntry other) => this == other;
+		public bool Equals(SitemapEntry other)
+		{
+			if (other is null)
+			{
+				return false;
+			}
 
-		public bool Equals(Uri other) => this == other;
+			if (ReferenceEquals(this, other))
+			{
+				return true;
+			}
 
-		public static bool operator ==(SitemapEntry x, SitemapEntry y) => x?.Location == y?.Location;
+			return Location == other.Location;
+		}
+
+		public bool Equals(Uri other) => Location == other;
+
+		public static bool operator ==(SitemapEntry x, SitemapEntry y) => !(x is null) ? x.Equals(y) : y is null;
 
 		public static bool operator !=(SitemapEntry x, SitemapEntry y) => !(x == y);
 
-		public static bool operator ==(SitemapEntry x, Uri y) => x?.Location == y;
+		public static bool operator ==(SitemapEntry x, Uri y) => !(x is null) ? x.Equals(y) : y is null;
 
 		public static bool operator !=(SitemapEntry x, Uri y) => !(x == y);
 

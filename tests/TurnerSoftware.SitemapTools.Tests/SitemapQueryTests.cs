@@ -30,7 +30,7 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
-		public async Task GetSitemapAsyncNotFound()
+		public async Task GetSitemapAsync_NotFound()
 		{
 			var sitemapQuery = GetSitemapQuery();
 			var uriBuilder = GetTestServerUriBuilder();
@@ -38,11 +38,11 @@ namespace TurnerSoftware.SitemapTools.Tests
 			uriBuilder.Path = "basic-sitemapNotFound.xml";
 			var sitemap = await sitemapQuery.GetSitemapAsync(uriBuilder.Uri);
 
-			Assert.AreEqual(null, sitemap);
+			Assert.IsNull(sitemap);
 		}
 
 		[TestMethod]
-		public async Task GetSitemapAsyncWrongFormat()
+		public async Task GetSitemapAsync_WrongFormat()
 		{
 			var sitemapQuery = GetSitemapQuery();
 			var uriBuilder = GetTestServerUriBuilder();
@@ -50,11 +50,11 @@ namespace TurnerSoftware.SitemapTools.Tests
 			uriBuilder.Path = "basic-sitemap-WrongFormat.xml";
 			var sitemap = await sitemapQuery.GetSitemapAsync(uriBuilder.Uri);
 
-			Assert.AreEqual(null, sitemap);
+			Assert.IsNull(sitemap);
 		}
 
 		[TestMethod]
-		public async Task GetSitemapAsyncWrongFormatTxt()
+		public async Task GetSitemapAsync_WrongFormatTxt()
 		{
 			var sitemapQuery = GetSitemapQuery();
 			var uriBuilder = GetTestServerUriBuilder();
@@ -67,16 +67,15 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
-		public async Task GetSitemapAsyncCancelation()
+		public async Task GetSitemapAsync_Cancellation()
 		{
-			var cts = new CancellationTokenSource(0);
 			var sitemapQuery = GetSitemapQuery();
 			var uriBuilder = GetTestServerUriBuilder();
 
 			uriBuilder.Path = "basic-sitemap.xml";
-			SitemapFile sitemap = null;
-			await Assert.ThrowsExceptionAsync<OperationCanceledException>(async () => sitemap = await sitemapQuery.GetSitemapAsync(uriBuilder.Uri, cts.Token));
-			Assert.AreEqual(null, sitemap);
+			await Assert.ThrowsExceptionAsync<OperationCanceledException>(
+				async () => await sitemapQuery.GetSitemapAsync(uriBuilder.Uri, new CancellationToken(true))
+			);
 		}
 
 		[TestMethod]
@@ -94,13 +93,12 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
-		public async Task DiscoverSitemapsAsyncCancelation()
+		public async Task DiscoverSitemapsAsync_Cancellation()
 		{
-			var cts = new CancellationTokenSource(0);
 			var sitemapQuery = GetSitemapQuery();
-			IEnumerable<Uri> discoveredSitemaps = null;
-			await Assert.ThrowsExceptionAsync<OperationCanceledException>(async () => discoveredSitemaps = await sitemapQuery.DiscoverSitemapsAsync("localhost", cts.Token));
-			Assert.AreEqual(null, discoveredSitemaps);
+			await Assert.ThrowsExceptionAsync<OperationCanceledException>(
+				async () => await sitemapQuery.DiscoverSitemapsAsync("localhost", new CancellationToken(true))
+			);
 		}
 
 		[TestMethod]
@@ -118,17 +116,16 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
-		public async Task GetAllSitemapsForDomainAsyncCancelation()
+		public async Task GetAllSitemapsForDomainAsync_Cancellation()
 		{
-			var cts = new CancellationTokenSource(0);
 			var sitemapQuery = GetSitemapQuery();
-			IEnumerable<SitemapFile> sitemaps = null;
-			await Assert.ThrowsExceptionAsync<OperationCanceledException>(async () => sitemaps = await sitemapQuery.GetAllSitemapsForDomainAsync("localhost", cts.Token));
-			Assert.AreEqual(null, sitemaps);
+			await Assert.ThrowsExceptionAsync<OperationCanceledException>(
+				async () => await sitemapQuery.GetAllSitemapsForDomainAsync("localhost", new CancellationToken(true))
+			);
 		}
 
 		[TestMethod]
-		public async Task SupportsGzippedSitemapAsync()
+		public async Task SupportsGzippedSitemap()
 		{
 			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
 			{

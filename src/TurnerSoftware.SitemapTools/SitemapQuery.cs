@@ -82,8 +82,8 @@ namespace TurnerSoftware.SitemapTools
 				defaultSitemapUri
 			};
 			
-			var robotsFile = await new RobotsFileParser(HttpClient).FromUriAsync(baseUri);
-			cancellationToken.ThrowIfCancellationRequested();
+			var robotsFile = await new RobotsFileParser(HttpClient).FromUriAsync(baseUri, cancellationToken);
+			
 			sitemapUris.AddRange(robotsFile.SitemapEntries.Select(s => s.Sitemap));
 			sitemapUris = sitemapUris.Distinct().ToList();
 			

@@ -45,6 +45,7 @@ namespace TurnerSoftware.SitemapTools.Parser
 
 					foreach (var urlNode in topNode.Elements())
 					{
+						cancellationToken.ThrowIfCancellationRequested();
 						var sitemapEntry = ParseSitemapEntry(urlNode);
 						urls.Add(sitemapEntry);
 					}
@@ -57,6 +58,7 @@ namespace TurnerSoftware.SitemapTools.Parser
 
 					foreach (var sitemapNode in topNode.Elements())
 					{
+						cancellationToken.ThrowIfCancellationRequested();
 						var indexedSitemap = ParseSitemapIndex(sitemapNode);
 						indexedSitemaps.Add(indexedSitemap);
 					}

@@ -12,7 +12,7 @@ namespace TurnerSoftware.SitemapTools.Tests
 	public class XmlSitemapParserTests : TestBase
 	{
 		[TestMethod]
-		public async Task ChangeFrequenciesAreSetCorrectlyAsync()
+		public async Task ChangeFrequenciesAreSetCorrectly()
 		{
 			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
 			{
@@ -104,26 +104,20 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
-		public async Task ParseSitemapFileAsyncCancelation()
+		public async Task ParseSitemapFileAsync_Cancellation()
 		{
-			var cts = new CancellationTokenSource(0);
 			using (var reader = LoadResource("basic-sitemap.xml"))
 			{
 				var parser = new XmlSitemapParser();
-				SitemapFile sitemapFile = null;
 				try
 				{
-					sitemapFile = await parser.ParseSitemapAsync(reader, cts.Token);
+					await parser.ParseSitemapAsync(reader, new CancellationToken(true));
 				}
-				catch (TaskCanceledException ex)
+				catch (Exception ex) when (ex is TaskCanceledException || ex is OperationCanceledException)
 				{
-					Assert.ThrowsException<TaskCanceledException>(() => throw ex);
+					return;
 				}
-				catch (OperationCanceledException ex)
-				{
-					Assert.ThrowsException<OperationCanceledException>(() => throw ex);
-				}
-				Assert.AreEqual(null, sitemapFile);
+				Assert.Fail("Expected exception not thrown");
 			}
 		}
 	}

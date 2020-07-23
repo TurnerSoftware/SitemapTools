@@ -36,15 +36,14 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
-		public async Task ParseTextSitemapAsyncCancelation()
+		public async Task ParseTextSitemapAsync_Cancellation()
 		{
-			var cts = new CancellationTokenSource(0);
 			using (var reader = LoadResource("text-sitemap.txt"))
 			{
 				var parser = new TextSitemapParser();
-				SitemapFile sitemapFile = null;
-				await Assert.ThrowsExceptionAsync<OperationCanceledException>(async () => sitemapFile = await parser.ParseSitemapAsync(reader, cts.Token));
-				Assert.AreEqual(null, sitemapFile);
+				await Assert.ThrowsExceptionAsync<OperationCanceledException>(
+					async () => await parser.ParseSitemapAsync(reader, new CancellationToken(true))
+				);
 			}
 		}
 	}

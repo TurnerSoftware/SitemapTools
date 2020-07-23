@@ -83,8 +83,7 @@ namespace TurnerSoftware.SitemapTools
 			};
 			
 			var robotsFile = await new RobotsFileParser(HttpClient).FromUriAsync(baseUri);
-			if (cancellationToken.IsCancellationRequested)
-				throw new OperationCanceledException();
+			cancellationToken.ThrowIfCancellationRequested();
 			sitemapUris.AddRange(robotsFile.SitemapEntries.Select(s => s.Sitemap));
 			sitemapUris = sitemapUris.Distinct().ToList();
 			
@@ -147,8 +146,7 @@ namespace TurnerSoftware.SitemapTools
 
 							using (var stream = await response.Content.ReadAsStreamAsync())
 							{
-								if (cancellationToken.IsCancellationRequested)
-									throw new OperationCanceledException();
+								cancellationToken.ThrowIfCancellationRequested();
 								var contentStream = stream;
 								if (requiresManualDecompression)
 								{

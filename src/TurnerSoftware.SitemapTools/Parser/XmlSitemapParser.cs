@@ -23,12 +23,11 @@ namespace TurnerSoftware.SitemapTools.Parser
 
 			try
 			{
-#if (NETSTANDARD2_1 || NETCOREAPP)
+#if NETSTANDARD2_1
 				document = await XDocument.LoadAsync(reader, LoadOptions.None, cancellationToken);
 #else
 				document = XDocument.Load(reader, LoadOptions.None);
-				if (cancellationToken.IsCancellationRequested)
-					throw new OperationCanceledException();
+				cancellationToken.ThrowIfCancellationRequested();
 #endif
 			}
 			catch (XmlException)

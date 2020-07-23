@@ -15,8 +15,7 @@ namespace TurnerSoftware.SitemapTools.Parser
 			string line;
 			while ((line = await reader.ReadLineAsync()) != null)
 			{
-				if (cancellationToken.IsCancellationRequested)
-					throw new OperationCanceledException();
+				cancellationToken.ThrowIfCancellationRequested();
 				if (Uri.TryCreate(line, UriKind.Absolute, out var tmpUri))
 				{
 					sitemapEntries.Add(new SitemapEntry

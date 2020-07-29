@@ -99,7 +99,7 @@ namespace TurnerSoftware.SitemapTools
 
 				try
 				{
-					var requestMessage = new HttpRequestMessage(IsHeadMethodUnsupported? HttpMethod.Get : HttpMethod.Head, uri);
+					var requestMessage = new HttpRequestMessage(IsHeadMethodUnsupported ? HttpMethod.Get : HttpMethod.Head, uri);
 					var response = await HttpClient.SendAsync(requestMessage, cancellationToken);
 
 					if (response.IsSuccessStatusCode)

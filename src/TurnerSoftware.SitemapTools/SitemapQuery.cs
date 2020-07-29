@@ -100,6 +100,18 @@ namespace TurnerSoftware.SitemapTools
 					if (response.IsSuccessStatusCode)
 					{
 						result.Add(uri);
+						continue;
+					}
+
+					if ((int)response.StatusCode >= 400 && (int)response.StatusCode < 500 && response.StatusCode != HttpStatusCode.NotFound)
+					{
+						requestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
+						response = await HttpClient.SendAsync(requestMessage, cancellationToken);
+
+						if (response.IsSuccessStatusCode)
+						{
+							result.Add(uri);
+						}
 					}
 				}
 				catch (WebException ex)

@@ -64,6 +64,11 @@ namespace TurnerSoftware.SitemapTools
 		}
 
 		/// <summary>
+		/// Some sites does not request on <see cref="global::System.Net.Http.HttpMethod.Head"/> so execute for them <see cref="global::System.Net.Http.HttpMethod.Get"/> request.
+		/// </summary>
+		public bool IsHeadMethodUnsupported { get; set; }
+
+		/// <summary>
 		/// Discovers available sitemaps for a given domain name, returning a list of sitemap URIs discovered.
 		/// The sitemaps are discovered from a combination of the site root and looking through the robots.txt file.
 		/// </summary>
@@ -94,7 +99,7 @@ namespace TurnerSoftware.SitemapTools
 
 				try
 				{
-					var requestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
+					var requestMessage = new HttpRequestMessage(IsHeadMethodUnsupported? HttpMethod.Get : HttpMethod.Head, uri);
 					var response = await HttpClient.SendAsync(requestMessage, cancellationToken);
 
 					if (response.IsSuccessStatusCode)

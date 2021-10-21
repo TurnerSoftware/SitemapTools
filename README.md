@@ -15,6 +15,16 @@ A sitemap (sitemap.xml) querying and parsing library for .NET
 - Handles GZ-compressed XML sitemaps
 - Supports TXT sitemaps
 
+
+## Licensing and Support
+
+Sitemap Tools is licensed under the MIT license. It is free to use in personal and commercial projects.
+
+There are [support plans](https://turnersoftware.com.au/support-plans) available that cover all active [Turner Software OSS projects](https://github.com/TurnerSoftware).
+Support plans provide private email support, expert usage advice for our projects, priority bug fixes and more.
+These support plans help fund our OSS commitments to provide better software for everyone.
+
+
 ## Notes
 - Does not enforce sitemap standards [as described at sitemaps.org](http://www.sitemaps.org/protocol.html)
 - Does not validate the sitemaps

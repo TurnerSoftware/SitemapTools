@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29201.188
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31808.319
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{B79203C9-7B50-4C91-A0AD-EAA6FBAABD53}"
 	ProjectSection(SolutionItems) = preProject
@@ -9,9 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{B79203
 		.codecov.yml = .codecov.yml
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
-		build.appveyor.ps1 = build.appveyor.ps1
-		build.ps1 = build.ps1
-		buildconfig.json = buildconfig.json
 		License.txt = License.txt
 		README.md = README.md
 	EndProjectSection

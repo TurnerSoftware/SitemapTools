@@ -1,10 +1,14 @@
+<div align="center">
+
+![Icon](images/icon.png)
 # Sitemap Tools
 
-A sitemap (sitemap.xml) querying and parsing library in C#
+A sitemap (sitemap.xml) querying and parsing library for .NET
 
-[![AppVeyor](https://img.shields.io/appveyor/ci/Turnerj/sitemaptools/master.svg)](https://ci.appveyor.com/project/Turnerj/sitemaptools)
+![Build](https://img.shields.io/github/workflow/status/TurnerSoftware/sitemaptools/Build)
 [![Codecov](https://img.shields.io/codecov/c/github/turnersoftware/sitemaptools/master.svg)](https://codecov.io/gh/TurnerSoftware/SitemapTools)
 [![NuGet](https://img.shields.io/nuget/v/TurnerSoftware.SitemapTools.svg)](https://www.nuget.org/packages/TurnerSoftware.SitemapTools)
+</div>
 
 ## Key features
 - Parses both XML sitemaps and [sitemap index files](http://www.sitemaps.org/protocol.html#index)

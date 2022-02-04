@@ -5,7 +5,6 @@ VisualStudioVersion = 17.0.31808.319
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{B79203C9-7B50-4C91-A0AD-EAA6FBAABD53}"
 	ProjectSection(SolutionItems) = preProject
-		.appveyor.yml = .appveyor.yml
 		.codecov.yml = .codecov.yml
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore

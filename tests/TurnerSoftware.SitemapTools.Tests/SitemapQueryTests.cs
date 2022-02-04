@@ -67,18 +67,6 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
-		public async Task GetSitemapAsync_Cancellation()
-		{
-			var sitemapQuery = GetSitemapQuery();
-			var uriBuilder = GetTestServerUriBuilder();
-
-			uriBuilder.Path = "basic-sitemap.xml";
-			await Assert.ThrowsExceptionAsync<OperationCanceledException>(
-				async () => await sitemapQuery.GetSitemapAsync(uriBuilder.Uri, new CancellationToken(true))
-			);
-		}
-
-		[TestMethod]
 		public async Task DiscoverSitemapsAsync()
 		{
 			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
@@ -93,15 +81,6 @@ namespace TurnerSoftware.SitemapTools.Tests
 		}
 
 		[TestMethod]
-		public async Task DiscoverSitemapsAsync_Cancellation()
-		{
-			var sitemapQuery = GetSitemapQuery();
-			await Assert.ThrowsExceptionAsync<OperationCanceledException>(
-				async () => await sitemapQuery.DiscoverSitemapsAsync("localhost", new CancellationToken(true))
-			);
-		}
-
-		[TestMethod]
 		public async Task GetAllSitemapsForDomainAsync()
 		{
 			foreach (var culture in CultureInfo.GetCultures(CultureTypes.AllCultures))
@@ -113,15 +92,6 @@ namespace TurnerSoftware.SitemapTools.Tests
 
 				Assert.AreEqual(7, sitemaps.Count());
 			}
-		}
-
-		[TestMethod]
-		public async Task GetAllSitemapsForDomainAsync_Cancellation()
-		{
-			var sitemapQuery = GetSitemapQuery();
-			await Assert.ThrowsExceptionAsync<OperationCanceledException>(
-				async () => await sitemapQuery.GetAllSitemapsForDomainAsync("localhost", new CancellationToken(true))
-			);
 		}
 
 		[TestMethod]

@@ -132,9 +132,8 @@ namespace TurnerSoftware.SitemapTools
 		/// Retrieves a sitemap at the given URI, converting it to a <see cref="SitemapFile"/>.
 		/// </summary>
 		/// <param name="sitemapUrl">The URI where the sitemap exists.</param>
-		/// <param name="permitInvalidOperations">Suppresses exceptions for invalid operations and returns null result</param>
-		/// <returns>The found and converted <see cref="SitemapFile"/></returns>
-		public async Task<SitemapFile> GetSitemapAsync(Uri sitemapUrl, CancellationToken cancellationToken = default, bool permitInvalidOperations = false)
+		/// <returns>The found and converted <see cref="SitemapFile", or null if unrecognised/></returns>
+		public async Task<SitemapFile> GetSitemapAsync(Uri sitemapUrl, CancellationToken cancellationToken = default)
 		{
 			try
 			{
@@ -179,14 +178,10 @@ namespace TurnerSoftware.SitemapTools
 								}
 							}
 						}
-						else if (!permitInvalidOperations)
+						else
 						{
 							throw new InvalidOperationException($"No sitemap readers for {sitemapType}");
 						}
-					}
-					else if (!permitInvalidOperations)
-					{
-						throw new InvalidOperationException($"Unknown sitemap content type {contentType}");
 					}
 				}
 
@@ -217,7 +212,7 @@ namespace TurnerSoftware.SitemapTools
 			while (sitemapUris.Count > 0)
 			{
 				var sitemapUri = sitemapUris.Pop();
-				var sitemapFile = await GetSitemapAsync(sitemapUri, cancellationToken, true);
+				var sitemapFile = await GetSitemapAsync(sitemapUri, cancellationToken);
 				if (sitemapFile != null)
 				{
 					sitemapFiles.Add(sitemapUri, sitemapFile);

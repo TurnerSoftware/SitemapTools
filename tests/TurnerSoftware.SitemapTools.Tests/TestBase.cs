@@ -1,41 +1,39 @@
 using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TurnerSoftware.SitemapTools.Tests.Server;
 
-namespace TurnerSoftware.SitemapTools.Tests
+namespace TurnerSoftware.SitemapTools.Tests;
+
+[TestClass]
+public class TestBase
 {
-	[TestClass]
-	public class TestBase
+	[AssemblyInitialize]
+	public static void AssemblyInitialize(TestContext context)
 	{
-		[AssemblyInitialize]
-		public static void AssemblyInitialize(TestContext context)
-		{
-			TestConfiguration.StartupServer();
-		}
+		TestConfiguration.StartupServer();
+	}
 
-		[AssemblyCleanup]
-		public static void AssemblyCleanup()
-		{
-			TestConfiguration.ShutdownServer();
-		}
+	[AssemblyCleanup]
+	public static void AssemblyCleanup()
+	{
+		TestConfiguration.ShutdownServer();
+	}
 
-		protected SitemapQuery GetSitemapQuery()
-		{
-			var client = TestConfiguration.GetHttpClient();
-			return new SitemapQuery(client);
-		}
+	protected SitemapQuery GetSitemapQuery()
+	{
+		var client = TestConfiguration.GetHttpClient();
+		return new SitemapQuery(client);
+	}
 
-		protected UriBuilder GetTestServerUriBuilder()
-		{
-			var client = TestConfiguration.GetHttpClient();
-			return new UriBuilder(client.BaseAddress);
-		}
+	protected UriBuilder GetTestServerUriBuilder()
+	{
+		var client = TestConfiguration.GetHttpClient();
+		return new UriBuilder(client.BaseAddress);
+	}
 
-		protected StreamReader LoadResource(string name)
-		{
-			var fileStream = new FileStream($"Resources/{name}", FileMode.Open);
-			return new StreamReader(fileStream);
-		}
+	protected StreamReader LoadResource(string name)
+	{
+		var fileStream = new FileStream($"Resources/{name}", FileMode.Open);
+		return new StreamReader(fileStream);
 	}
 }

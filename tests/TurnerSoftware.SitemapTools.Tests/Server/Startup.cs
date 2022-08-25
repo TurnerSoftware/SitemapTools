@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.FileProviders;
 
-namespace TurnerSoftware.SitemapTools.Tests.Server
+namespace TurnerSoftware.SitemapTools.Tests.Server;
+
+public class Startup
 {
-	public class Startup
+	public void Configure(IApplicationBuilder app)
 	{
-		public void Configure(IApplicationBuilder app)
+		app.UseStaticFiles(new StaticFileOptions
 		{
-			app.UseStaticFiles(new StaticFileOptions
-			{
-				FileProvider = new PhysicalFileProvider(
-					Path.Combine(Directory.GetCurrentDirectory(), "Resources"))
-			});
-		}
+			FileProvider = new PhysicalFileProvider(
+				Path.Combine(Directory.GetCurrentDirectory(), "Resources"))
+		});
 	}
 }

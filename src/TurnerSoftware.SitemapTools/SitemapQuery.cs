@@ -147,7 +147,8 @@ public class SitemapQuery
 				var contentType = response.Content.Headers.ContentType.MediaType;
 				var requiresManualDecompression = false;
 				
-				if (contentType.Equals("application/x-gzip", StringComparison.InvariantCultureIgnoreCase))
+				if (contentType.Equals("application/x-gzip", StringComparison.InvariantCultureIgnoreCase)||
+                    		    contentType.Equals("application/octet-stream", StringComparison.InvariantCultureIgnoreCase))
 				{
 					requiresManualDecompression = true;
 					var baseFileName = Path.GetFileNameWithoutExtension(sitemapUrl.AbsolutePath);

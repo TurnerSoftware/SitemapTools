@@ -5,7 +5,7 @@
 
 A sitemap (sitemap.xml) querying and parsing library for .NET
 
-![Build](https://img.shields.io/github/workflow/status/TurnerSoftware/sitemaptools/Build)
+![Build](https://img.shields.io/github/actions/workflow/status/TurnerSoftware/sitemaptools/build.yml?branch=main)
 [![Codecov](https://img.shields.io/codecov/c/github/turnersoftware/sitemaptools/master.svg)](https://codecov.io/gh/TurnerSoftware/SitemapTools)
 [![NuGet](https://img.shields.io/nuget/v/TurnerSoftware.SitemapTools.svg)](https://www.nuget.org/packages/TurnerSoftware.SitemapTools)
 </div>

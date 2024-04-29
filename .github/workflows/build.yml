@@ -28,13 +28,12 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup dotnet 3.1 5.0 6.0
+    - name: Setup dotnet SDKs
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: |
-          3.1.x
-          5.0.x
           6.0.x 
+          8.0.x 
     - name: Install dependencies
       run: dotnet restore
     - name: Build
@@ -63,7 +62,7 @@ jobs:
     - name: Prepare coverage reports
       run: reportgenerator -reports:*/coverage/*/coverage.cobertura.xml -targetdir:./ -reporttypes:Cobertura
     - name: Upload coverage report
-      uses: codecov/codecov-action@v1.0.13
+      uses: codecov/codecov-action@v4.3.0
       with:
         file: Cobertura.xml
         fail_ci_if_error: false
